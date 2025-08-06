@@ -43,7 +43,7 @@
           <li><a href="<?php echo base_url('admin/barang/cari_masuk') ?>"><i class="fa fa-mail-forward"></i>Data Transaksi Masuk </a></li>
           <li><a href="<?php echo base_url('admin/barang/cari_keluar') ?>"><i class="fa fa-mail-reply"></i>Data Transaksi Keluar </a></li>
         <?php } ?>
-
+<!-- s -->
 
         <?php if($this->session->userdata('level') == "kapustu") { ?>
 

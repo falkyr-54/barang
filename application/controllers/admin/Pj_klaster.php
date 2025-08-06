@@ -13,7 +13,7 @@ class Pj_klaster extends CI_Controller
 		$this->load->model('Tahun_model');
 	}
 
-
+// test controller pj
 	public function index()
 	{
 		$id_klaster     = $this->session->userdata('id_klaster');

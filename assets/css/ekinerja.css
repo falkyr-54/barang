@@ -1,0 +1,169 @@
+/* CSS Document */
+*{
+margin:0;padding:0; /* CSS Reset */
+}
+
+body {
+  /* background: rgb(204,204,204); */ 
+  font-family: Calibri, Calibri, sans-serif;
+}
+page {
+  /* background: white; */
+  /* display: block; */
+  margin: 0 auto;
+  margin-bottom: 0.5cm;
+  box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+}
+h1 {
+	font-size: 14px;
+	text-align: center;
+	margin-top: 0;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+/* cetak */
+.cetak {
+	padding: 1cm;
+}
+tr.ada, .ada td {
+	border:solid thin #000 !important;
+	padding : 10px;
+  font-size: 12px;
+}
+
+td.red {
+  font-size: 17px;
+  background-color: dimgrey;
+}
+/* printer */
+table.printer {
+	border: solid thin #000;
+	font-size: 11px;
+}
+th, td {
+	border: solid 1px #000;
+}
+tr.tengah {
+	font-weight: bold;
+	text-align: center;
+	vertical-align: middle;
+}
+tr.kiri {
+	text-align: left;
+	vertical-align: top;
+}
+td.center {
+	text-align: center !important;
+}
+tr.kiri td {
+	padding: 2mm;
+}
+tr.abu {
+		background-color: #EEE !important;
+		font-weight: bold;
+}
+page[size="A4"] {  
+  width: 21cm;
+  height: auto; 
+	min-height: 29.7cm;
+}
+page[size="A4"][layout="portrait"] {
+  width: 29.7cm;
+  min-height: 21cm;
+  height: auto;
+}
+page[size="A3"] {
+  width: 33.7cm !important;
+  height: auto;
+}
+page[size="A3"][layout="portrait"] {
+  width: 42cm;
+  min-height: 29.7cm;
+  height: auto; 
+}
+page[size="A5"] {
+  width: 14.8cm;
+  height: 21cm;
+}
+page[size="F4"] {
+  width: 21.6cm;
+  height: 33cm;
+}
+
+table.printer {
+  border: solid thin #000;
+  font-size: 11px;
+  border-collapse: collapse;
+}
+
+/*titik itu class*/
+.hasil {
+  font-size: 12px;
+padding: 10px;
+}
+.hasil td, .hasil th {
+  padding: 5px 1px;
+  text-align: left;
+  vertical-align: top;
+  margin-right: 10px;
+  margin-left: : 10px;
+}
+.hasil img {
+  width: 50cm;
+  height: auto;
+  margin: 3mm;
+}
+.hasil td.foto {
+  text-align: center;
+  width: 3cm;
+}
+th, td {
+  border: solid 1px #000;
+}
+tr.tengah {
+  text-align: center;
+  vertical-align: middle;
+}
+tr.kiri {
+  text-align: left;
+  vertical-align: top;
+}
+td.center {
+  text-align: center !important;
+}
+tr.kiri td {
+  padding: 2mm;
+}
+page[size="F4"][layout="landscape"] {
+  width: 33cm;
+  min-height: 21cm;
+  height:auto;
+}
+
+
+.khusus {
+	padding-left: 10cm;
+	font-size: 14px;
+	font-family: "Courier New", Courier, monospace;
+}
+.khusus1 {
+	padding: 1cm;
+	font-size: 14px;
+	font-family: "Courier New", Courier, monospace;
+	margin-bottom:0;
+}
+.tidak table, .tidak td, .tidak th{
+	border: none;
+	vertical-align: top;
+}
+page[size="A5"][layout="portrait"] {
+  width: 21cm;
+  height: 14.8cm;  
+}
+@media print {
+  body, page {
+    margin: 0;
+    box-shadow: 0;
+  }
+}
+

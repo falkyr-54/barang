@@ -165,7 +165,7 @@ if (isset($error)) {
 
         <div class="form-group">
           <label class="control-label">Nilai Pesanan</label>
-          <input type="text" disabled name="nilai_pesanan" id="nilai_pesanan" value="" class="form-control" placeholder="Nilai Pesanan">
+          <input type="text" readonly name="nilai_pesanan" id="nilai_pesanan" class="form-control" placeholder="Nilai Pesanan">
         </div>
 
         <div class="form-group">
@@ -197,10 +197,11 @@ if (isset($error)) {
 <script>
   $(document).ready(function() {
     //get name jumlah
-    $('#harga').on('keyup', function() {
-      let jumlah = $('#jumlah').val();
-      let harga = $(this).val();
+    $('#harga, #jumlah').on('keyup change', function() {
+      let jumlah = parseFloat($('#jumlah').val()) || 0;
+      let harga = parseFloat($('#harga').val()) || 0;
       let total = jumlah * harga;
+
       $('#nilai_pesanan').val(total);
     });
   });

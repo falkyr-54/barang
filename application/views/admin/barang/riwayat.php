@@ -50,6 +50,7 @@ if ($this->session->flashdata('sukses')) {
           <th width="74">Tanggal SP</th>
           <th width="27">Nomor SP</th>
           <th width="27">ID Paket Ekatalog</th>
+          <th width="27">Nilai Pesanan</th>
           <th width="27">No Batch / Lot Barang</th>
           <th width="27">Status Pesanan</th>
           <th width="27">ED Barang</th>
@@ -72,6 +73,8 @@ if ($this->session->flashdata('sukses')) {
             <td><?php echo $masuk['tgl_sip'] ?></td>
             <td><?php echo $masuk['no_sp'] ?></td>
             <td><?php echo $masuk['id_paket_ekatalog'] ?></td>
+            <td><?php echo 'Rp' . number_format($masuk['nilai_pesenan'], 0, ',', '.'); ?></td>
+
             <td><?php echo $masuk['no_bacth_lot_barang'] ?></td>
             <td><?php echo $masuk['status_pesanaan'] ?></td>
             <td><?php echo $masuk['ed_barang'] ?></td>

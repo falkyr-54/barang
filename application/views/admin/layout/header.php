@@ -4,12 +4,10 @@ $id_satker     = $this->session->userdata('id_satker');
 $konfigurasi  = $this->konfigurasi_model->listing();
 $user_detail  = $this->user_model->detail($id_user);
 
-// print_r($expired1bulan);
+print_r($isi);
 // echo "<pre>";
 // print_r($expired3bulan);
 // echo "</pre>";
-
-
 ?>
 <header class="main-header">
   <!-- Logo -->

@@ -84,15 +84,16 @@ if (isset($error)) {
         </div>
 
         <div class="form-group">
+          <label class="control-label">Nilai Pesanan</label>
+          <input type="text" readonly name="nilai_pesanan" id="nilai_pesanan" class="form-control" placeholder="Nilai Pesanan">
+        </div>
+
+        <div class="form-group">
           <label>TKDN</label>
           <input type="text" name="tkdn" class="form-control" placeholder="TKDN">
         </div>
 
-        <div class="form-group">
-          <label>NO SP</label>
-          <input type="text" name="no_sp" class="form-control" placeholder="NO SP ...">
-        </div>
-        <div class="form-group">
+              <div class="form-group">
           <label>ID Paket Ekatalog</label>
           <input type="text" name="id_paket_ekatalog" class="form-control" placeholder="ID Paket Ekatalog ...">
         </div>
@@ -163,10 +164,12 @@ if (isset($error)) {
           <input type="date" name="tgl_sip" value="" class="form-control" placeholder="tgl SIP ...">
         </div>
 
-        <div class="form-group">
-          <label class="control-label">Nilai Pesanan</label>
-          <input type="text" readonly name="nilai_pesanan" id="nilai_pesanan" class="form-control" placeholder="Nilai Pesanan">
+     
+          <div class="form-group">
+          <label>NO SP</label>
+          <input type="text" name="no_sp" class="form-control" placeholder="NO SP ...">
         </div>
+
 
         <div class="form-group">
           <label class="control-label">No Batch / Lot Barang</label>

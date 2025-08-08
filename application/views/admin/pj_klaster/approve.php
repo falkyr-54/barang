@@ -24,15 +24,15 @@
  				<div class="modal-body">
  					
  					<label>Permintaan barang : </label>
- 					<input type="text" name="jumlah_keluar" class="form-control" value="<?php echo $klast['jumlah_keluar'] ?>" placeholder="isi" style="width: 60px;" required> 
+ 					<input type="text" name="jumlah_keluar" class="form-control" value="<?php echo $klast['jumlah_keluar'] ?>" placeholder="isi" readonly> 
  					<?php echo $klast['satuan'] ?>
 
  					
  				</div>
 
  				<div class="modal-footer">
- 					<a href="<?php echo base_url('admin/pj_klaster/approve/'.$klast['id_barang_keluar']) ?>" class="btn btn-success"><i class="fa fa-check"></i> Setujui</a>
- 					<a href="<?php echo base_url('admin/pj_klaster/tolak/'.$klast['id_barang_keluar']) ?>" class="btn btn-danger"><i class="fa fa-check"></i> Tolak</a>
+ 					<a href="<?php echo base_url('admin/pj_klaster/approve/'.$klast['id_barang_keluar'].'/'.$tmt.'/'.$sampai) ?>" class="btn btn-success"><i class="fa fa-check"></i> Setujui</a>
+ 					<a href="<?php echo base_url('admin/pj_klaster/tolak/'.$klast['id_barang_keluar'].'/'.$tmt.'/'.$sampai) ?>" class="btn btn-danger"><i class="fa fa-check"></i> Tolak</a>
  				</div>
 
  			</div>

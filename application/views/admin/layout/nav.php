@@ -34,7 +34,7 @@
         <?php } ?>
 
         <?php if($this->session->userdata('level') == "admin_barang") { ?>
-          <li><a href="<?php echo base_url('admin/admin_barang/') ?>"><i class="fa fa-cubes"></i>Validasi admin barang</a></li>
+          <li><a href="<?php echo base_url('admin/admin_barang') ?>"><i class="fa fa-cubes"></i>Validasi admin barang</a></li>
         <?php } ?>
 
 

@@ -136,7 +136,7 @@ class Brg_keluar_model extends CI_Model
 		$this->db->insert('barang_keluar', $data);
 	}
 
-	public function detail($id_klaster,$id_barang_keluar)
+	public function detail($id_klaster, $id_barang_keluar)
 	{
 		$this->db->select('barang_keluar.*,ms_barang.nama_barang,ms_barang.kode_barang,ms_satuan.satuan,pegawai.nama_lengkap,barang_masuk.harga,barang_masuk.tahun_pengadaan,ms_rekanan.nama_rekanan,unit_bagian.unit,satker.nama_satker,barang_masuk.gambar');
 		$this->db->from('barang_keluar');
@@ -184,6 +184,17 @@ class Brg_keluar_model extends CI_Model
 		$this->db->where('id_barang_masuk', $id_barangku);
 		$this->db->where('tanggal_minta >=', $tmt);
 		$this->db->where('tanggal_minta <=', $tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_jumlah_stok_per_bulan($id_barang, $start_date, $end_date)
+	{
+		$this->db->select_sum('jumlah_keluar', 'total');
+		$this->db->from('barang_keluar');
+		$this->db->where('id_barang_masuk', $id_barang);
+		$this->db->where('tanggal_minta >=', $start_date);
+		$this->db->where('tanggal_minta <=', $end_date);
 		$query = $this->db->get();
 		return $query->row_array();
 	}
@@ -261,6 +272,4 @@ class Brg_keluar_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
-
-	
 }

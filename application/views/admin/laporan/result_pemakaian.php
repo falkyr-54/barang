@@ -7,7 +7,7 @@
 
       <form class="form-horizontal" name="form1" method="post" action="<?php echo base_url('admin/laporan/tampil_pemakaian/' . $tmt . '/' . $tmtdua . '/' . $id_jenis) ?>" enctype="multipart/form-data">
 
-        <div class="box-body">
+        <div class="box-body" style="width: auto;">
 
           <div class="form-group">
             <label for="inputEmail3" class="col-sm-2 control-label">Tanggal Awal</label>
@@ -57,7 +57,13 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h2 class="page-header">Laporan Barang <?php echo date('d-m-Y', strtotime($tmt)) ?> Sampai <?php echo date('d-m-Y', strtotime($tmtdua)) ?> </h2>
+        <h2 class="page-header">
+          Laporan Barang
+          <?php echo strftime('%d %B %Y', strtotime($tmt)); ?>
+          -
+          <?php echo strftime('%d %B %Y', strtotime($tmtdua)); ?>
+        </h2>
+
         <!-- Custom Tabs -->
         <div class="nav-tabs-custom">
 
@@ -71,48 +77,88 @@
 
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
+                  <tr class="bg-primary text-center">
+                    <th rowspan="2" width="37">No</th>
+                    <th rowspan="2" width="138">Nama Barang</th>
+                    <th rowspan="2" width="138">Satuan</th>
 
-                  <tr class="bg-primary">
-                    <th width="37">No</th>
-                    <th width="138">Nama Barang</th>
-                    <th width="138">Jenis Barang</th>
-                    <th width="138">Satuan</th>
-                    <th width="138">Tanggal</th>
-                    <th width="138">Harga</th>
-                    <th width="375">Stok tersedia</th>
-                    <th width="138">Barang masuk</th>
-                    <th width="138">Pemakaian barang</th>
-                    <th width="375">harga sisa stok</th>
-                    <!-- <th width="138">Stok <?php echo $this->tanggal->romawi($bulan) . ' ' . $tahun ?></th> -->
+                    <?php
+                    $year_start = date('Y', strtotime($tmt));
+                    $year_end   = date('Y', strtotime($tmtdua));
+                    ?>
+                    <th colspan="12" style="text-align: center;">
+                      Pemakaian <?php echo ($year_start == $year_end) ? $year_start : $year_start . ' - ' . $year_end; ?>
+                    </th>
+
+
+                    <th rowspan="2" width="138">Rata</th>
+                    <th rowspan="2" width="138">Harga</th>
+                    <th rowspan="2" width="375">Stok tersedia</th>
+                    <th rowspan="2" width="138">Barang masuk</th>
+                    <th rowspan="2" width="138">Pemakaian barang</th>
+                    <th rowspan="2" width="375">Harga sisa stok</th>
+                  </tr>
+                  <tr class="bg-primary text-center">
+                    <th width="90">Jan</th>
+                    <th width="90">Feb</th>
+                    <th width="90">Mar</th>
+                    <th width="90">Apr</th>
+                    <th width="90">Mei</th>
+                    <th width="90">Jun</th>
+                    <th width="90">Jul</th>
+                    <th width="90">Agu</th>
+                    <th width="90">Sep</th>
+                    <th width="90">Okt</th>
+                    <th width="90">Nov</th>
+                    <th width="90">Des</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   <?php
                   $i = 1;
-                  foreach ($brg as $brg) {
+                  foreach ($brg as $brg_item) {
 
-                    $id_barang   = $brg['id_barang_masuk'];
-                    $jml_masuk   = $this->Brg_masuk_model->get_jumlah_stok($id_barang, $tmt, $tmtdua);
-                    $jml_keluar  = $this->Brg_keluar_model->get_jumlah_stok($id_barang, $tmt, $tmtdua);
-
-                    $masuk  = $jml_masuk['total'];
-                    $keluar = $jml_keluar['total'];
-                    $hasil  = $jml_masuk['total'] - $jml_keluar['total'];
+                    $id_barang = $brg_item['id_barang_masuk'];
 
 
-                    $total_masuk   = $this->Brg_masuk_model->get_jumlah_msk($id_barang);
-                    $total_keluar  = $this->Brg_keluar_model->get_jumlah_klr($id_barang);
-                    $update  = $total_masuk['total'] - $total_keluar['total'];
+                    // Hitung stok tersedia dan data lainnya
+                    $jml_masuk  = $this->Brg_masuk_model->get_jumlah_stok($id_barang, $tmt, $tmtdua);
+                    $jml_keluar = $this->Brg_keluar_model->get_jumlah_stok($id_barang, $tmt, $tmtdua);
+
+                    $masuk  = isset($jml_masuk['total']) ? $jml_masuk['total'] : 0;
+                    $keluar = isset($jml_keluar['total']) ? $jml_keluar['total'] : 0;
+                    $hasil  = $masuk - $keluar;
+
+
+                    // Hitung total update stok
+                    $total_masuk  = $this->Brg_masuk_model->get_jumlah_msk($id_barang);
+                    $total_keluar = $this->Brg_keluar_model->get_jumlah_klr($id_barang);
+                    $update       = (isset($total_masuk['total']) ? $total_masuk['total'] : 0) - (isset($total_keluar['total']) ? $total_keluar['total'] : 0);
+
+                    // Ambil tahun dari tanggal mulai ($tmt)
+                    $tahun = date('Y', strtotime($tmt));
+
+                    // Hitung pemakaian Jan–Des tahun tersebut
+                    $bulan_pemakaian = array();
+                    for ($bulan = 1; $bulan <= 12; $bulan++) {
+                      $start_date = $tahun . "-" . str_pad($bulan, 2, "0", STR_PAD_LEFT) . "-01";
+                      $end_date   = date("Y-m-t", strtotime($start_date));
+
+                      $pemakaian  = $this->Brg_keluar_model->get_jumlah_stok_per_bulan($id_barang, $start_date, $end_date);
+                      $bulan_pemakaian[$bulan] = isset($pemakaian['total']) ? $pemakaian['total'] : 0;
+                    }
 
                   ?>
                     <tr>
                       <td><?php echo $i ?></td>
-                      <td><?php echo $brg['nama_barang'] ?></td>
-                      <td><?php echo $brg['nama_jenis'] ?></td>
-                      <td><?php echo $brg['satuan'] ?></td>
-                      <td><?php echo $brg['tanggal_minta'] ?></td>
-                      <td><?php echo 'Rp' . number_format($brg['harga'], 0, ',', '.') ?></td>
+                      <td><?php echo $brg_item['nama_barang'] ?></td>
+                      <td><?php echo $brg_item['satuan'] ?></td>
+                      <?php foreach ($bulan_pemakaian as $total): ?>
+                        <td><?php echo $total; ?></td>
+                      <?php endforeach; ?>
+                      <td><?php echo $brg_item['tanggal_minta'] ?></td>
+                      <td><?php echo 'Rp' . number_format($brg_item['harga'], 0, ',', '.') ?></td>
                       <td><?php echo $update ?></td>
                       <!-- <td>
                   <?php if ($hasil < 0) {
@@ -130,7 +176,7 @@
                             ?></td>
 
                       <td><?php echo $keluar ?></td>
-                      <td><?php echo 'Rp' . number_format($brg['harga'] * $update, 0, ',', '.') ?> </td>
+                      <td><?php echo 'Rp' . number_format($brg_item['harga'] * $update, 0, ',', '.') ?> </td>
                     </tr>
                   <?php $i++;
                   } ?>

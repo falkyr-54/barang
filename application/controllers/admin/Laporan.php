@@ -224,41 +224,59 @@ class Laporan extends CI_Controller
 
 	public function tampil_pemakaian()
 	{
-		$tmt  		 = $this->uri->segment(4);
-		$tmtdua  	 = $this->uri->segment(5);
-		$id_jenis  	 = $this->uri->segment(6);
-		$bulan	     = date('m', strtotime($tmtdua));
-		$tahun	     = date('Y', strtotime($tmtdua));
-		$barang       = $this->Jenis_model->listing();
-		$nama        = $this->Jenis_model->detail($id_jenis);
-		$brg 	     = $this->Brg_keluar_model->cari_brg_keluar($tmt, $tmtdua, $id_jenis);
+		$tmt        = $this->uri->segment(4);
+		$tmtdua     = $this->uri->segment(5);
+		$id_jenis   = $this->uri->segment(6);
+		$bulan      = date('m', strtotime($tmtdua));
+		$tahun      = date('Y', strtotime($tmtdua));
 
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
-		// $jml_masuk   = $this->Brg_masuk_model->get_jumlah_masuk($id_barang,$tmt,$tmtdua);
-		// $jml_keluar  = $this->Brg_keluar_model->get_jumlah_keluar($id_barang,$tmt,$tmtdua);
-		// $brg  		 = $this->Laporan_model->detail();
+		$barang     = $this->Jenis_model->listing();
+		$nama       = $this->Jenis_model->detail($id_jenis);
+		$brg        = $this->Brg_keluar_model->cari_brg_keluar($tmt, $tmtdua, $id_jenis);
+
+		// Loop setiap barang untuk ambil data per bulan
+		foreach ($brg as &$b) {
+			$id_barang = $b['id_barang_masuk'];
+			$tahun_laporan = $tahun; // dinamis
+
+			$pemakaian_bulanan = array();
+			for ($bln = 1; $bln <= 12; $bln++) {
+				$start_date = sprintf('%d-%02d-01', $tahun_laporan, $bln);
+				$end_date   = date('Y-m-t', strtotime($start_date));
+
+				$keluar_bulan = $this->Brg_keluar_model->get_jumlah_stok_per_bulan(
+					$id_barang,
+					$start_date,
+					$end_date
+				);
+
+				$pemakaian_bulanan[$bln] = (isset($keluar_bulan['total']) && $keluar_bulan['total'] != '')
+					? $keluar_bulan['total']
+					: 0;
+			}
+			$b['pemakaian_bulanan'] = $pemakaian_bulanan;
+		}
+		unset($b);
 
 		if (isset($_POST['tmt'])) {
 			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis'));
 			redirect(base_url('admin/laporan/tampil_pemakaian/' . $periode), 'refresh');
 		}
 
-
 		$data = array(
-			'title' 	 => 'Laporan Pemakaian' . $nama['nama_jenis'],
-			'brg' 		 => $brg,
-			'bulan' 	 => $bulan,
-			'tahun'      => $tahun,
-			'tmt' 		 => $tmt,
-			'tmtdua'     => $tmtdua,
-			'barang'     => $barang,
-			'id_jenis'   => $id_jenis,
-			'isi' 		 => 'admin/laporan/result_pemakaian'
+			'title'     => 'Laporan Pemakaian ' . $nama['nama_jenis'],
+			'brg'       => $brg,
+			'bulan'     => $bulan,
+			'tahun'     => $tahun,
+			'tmt'       => $tmt,
+			'tmtdua'    => $tmtdua,
+			'barang'    => $barang,
+			'id_jenis'  => $id_jenis,
+			'isi'       => 'admin/laporan/result_pemakaian'
 		);
 		$this->load->view('admin/layout/wrapper', $data);
 	}
+
 
 	//KELURAHAN
 	public function masuk_kel()

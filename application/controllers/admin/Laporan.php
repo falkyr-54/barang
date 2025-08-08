@@ -60,6 +60,41 @@ class Laporan extends CI_Controller
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
 
+	public function cari_pemakaian()
+	{
+
+		$tmt = date('Y-m-01');
+		$tmtdua = 0;
+		$id_jenis = 0;
+		$satker           = $this->Satker_model->listing();
+		$unit             = $this->Unit_model->listing();
+		$barang 		  = $this->Jenis_model->listing();
+		// $unit = $this->Unit_model->listing();
+		// $id_satker = 0;
+		// $id_unit = 0;
+
+
+		if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis'));
+			redirect(base_url('admin/laporan/tampil_luar/' . $periode), 'refresh');
+		}
+
+		$data = array(
+			'title'         => 'Laporan Pemakaian',
+			'tmt'           => $tmt,
+			'tmtdua'        => $tmtdua,
+			'barang'        => $barang,
+			'id_jenis'      => $id_jenis,
+			// 'unit'        	=> $unit,
+			// 'satker'        => $satker,
+			// 'id_satker'     => $id_satker,
+			// 'id_unit'       => $id_unit,
+			'isi'           => 'admin/laporan/list_pemakaian'
+		);
+
+		$this->load->view('admin/layout/wrapper', $data, FALSE);
+	}
+
 	public function cari_keluar()
 	{
 
@@ -186,6 +221,44 @@ class Laporan extends CI_Controller
 		$this->load->view('admin/layout/wrapper', $data);
 	}
 
+
+	public function tampil_pemakaian()
+	{
+		$tmt  		 = $this->uri->segment(4);
+		$tmtdua  	 = $this->uri->segment(5);
+		$id_jenis  	 = $this->uri->segment(6);
+		$bulan	     = date('m', strtotime($tmtdua));
+		$tahun	     = date('Y', strtotime($tmtdua));
+		$barang       = $this->Jenis_model->listing();
+		$nama        = $this->Jenis_model->detail($id_jenis);
+		$brg 	     = $this->Brg_keluar_model->cari_brg_keluar($tmt, $tmtdua, $id_jenis);
+
+		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
+		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
+		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
+		// $jml_masuk   = $this->Brg_masuk_model->get_jumlah_masuk($id_barang,$tmt,$tmtdua);
+		// $jml_keluar  = $this->Brg_keluar_model->get_jumlah_keluar($id_barang,$tmt,$tmtdua);
+		// $brg  		 = $this->Laporan_model->detail();
+
+		if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis'));
+			redirect(base_url('admin/laporan/tampil_pemakaian/' . $periode), 'refresh');
+		}
+
+
+		$data = array(
+			'title' 	 => 'Laporan Pemakaian' . $nama['nama_jenis'],
+			'brg' 		 => $brg,
+			'bulan' 	 => $bulan,
+			'tahun'      => $tahun,
+			'tmt' 		 => $tmt,
+			'tmtdua'     => $tmtdua,
+			'barang'     => $barang,
+			'id_jenis'   => $id_jenis,
+			'isi' 		 => 'admin/laporan/result_pemakaian'
+		);
+		$this->load->view('admin/layout/wrapper', $data);
+	}
 
 	//KELURAHAN
 	public function masuk_kel()

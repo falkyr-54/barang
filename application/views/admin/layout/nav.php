@@ -61,6 +61,7 @@
 
          <li><a href="<?php echo base_url('admin/laporan/cari_stok') ?>"><i class="fa fa-cubes"></i>Laporan barang masuk</a></li>
          <li><a href="<?php echo base_url('admin/laporan/cari_keluar') ?>"><i class="fa fa-cubes"></i>Laporan barang keluar</a></li>
+         <li><a href="<?php echo base_url('admin/laporan/cari_pemakaian') ?>"><i class="fa fa-cubes"></i>Laporan Pemakaian</a></li>
 
          <!-- <li><a href="<?php echo base_url('admin/laporan/opname') ?>"><i class="fa fa-cubes"></i>Laporan Rekap Stok Opname</a></li> -->
 

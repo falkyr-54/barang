@@ -1,7 +1,7 @@
  
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title" >Cari tanggal : </h3>
+    <h3 class="panel-title" >Cari tanggals : </h3>
   </div>
   <div class="panel-body">
 

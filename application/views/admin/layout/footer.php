@@ -8,7 +8,7 @@
   <div class="pull-right hidden-xs">
     <b>Version</b> 0.0.1
   </div>
-  <strong>Copyright &copy; 2018 <a href="http://puskesmaspasarrebo.com">Puskesmas Kecamatan  Pasar Rebo Studios</a>.</strong> IT Divisi 2018.
+  <strong>Copyright &copy; 2018 <a href="http://puskesmaspasarrebo.com">Puskesmas Kecamatan Pasar Rebo Studios</a>.</strong> IT Divisi 2018.
 </footer>
 
 <!-- Control Sidebar -->
@@ -174,121 +174,128 @@
     </div><!-- /.tab-pane -->
   </div>
 </aside><!-- /.control-sidebar -->
-      <!-- Add the sidebar's background. This div must be placed
+<!-- Add the sidebar's background. This div must be placed
         immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
-      </div><!-- ./wrapper -->
+<div class="control-sidebar-bg"></div>
+</div><!-- ./wrapper -->
 
 
-      <!-- Bootstrap 3.3.5 -->
-      <script src="<?php echo base_url() ?>assets/admin/bootstrap/js/bootstrap.min.js"></script>
-      <!-- DataTables -->
-      <script src="<?php echo base_url() ?>assets/admin/plugins/datatables/jquery.dataTables.min.js"></script>
-      <script src="<?php echo base_url() ?>assets/admin/plugins/datatables/dataTables.bootstrap.min.js"></script>
-      <!-- SlimScroll -->
-      <script src="<?php echo base_url() ?>assets/admin/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-      <!-- FastClick -->
-      <script src="<?php echo base_url() ?>assets/admin/plugins/fastclick/fastclick.min.js"></script>
-      <!-- AdminLTE App -->
-      <script src="<?php echo base_url() ?>assets/admin/dist/js/app.min.js"></script>
-      <!-- AdminLTE for demo purposes -->
-      <script src="<?php echo base_url() ?>assets/admin/dist/js/demo.js"></script>
-      <!-- page script -->
+<!-- Bootstrap 3.3.5 -->
+<script src="<?php echo base_url() ?>assets/admin/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- DataTables -->
+<script src="<?php echo base_url() ?>assets/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="<?php echo base_url() ?>assets/admin/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.min.js"></script>
+<!-- SlimScroll -->
+<script src="<?php echo base_url() ?>assets/admin/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<!-- FastClick -->
+<script src="<?php echo base_url() ?>assets/admin/plugins/fastclick/fastclick.min.js"></script>
+<!-- AdminLTE App -->
+<script src="<?php echo base_url() ?>assets/admin/dist/js/app.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="<?php echo base_url() ?>assets/admin/dist/js/demo.js"></script>
+<!-- page script -->
 
 
-      <script>
-        $(function () {
-          $("#example1").DataTable();
-          $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-          });
-        });
-      </script>
+<script>
+  $(function() {
+    $("#tabel_laporan_pemakaian").DataTable({
+      scrollX: true, // Aktifkan scroll horizontal
+      fixedColumns: {
+        leftColumns: 3 // Freeze kolom 1, 2, dan 3
+      },
+    });
 
-      <script>
-        $(function () {
-          $("#tabel1").DataTable();
-          $('#tabel2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-          });
-        });
-      </script>
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
 
-      <script>
-        $(function () {
-          $("#pendidikan1").DataTable();
-          $('#pendidikan2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false
-          });
-        });
-      </script>
+<script>
+  $(function() {
+    $("#tabel1").DataTable();
+    $('#tabel2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
+
+<script>
+  $(function() {
+    $("#pendidikan1").DataTable();
+    $('#pendidikan2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false
+    });
+  });
+</script>
 
 
 
 
-      <script type="text/javascript">
-        var tablepegawai;
+<script type="text/javascript">
+  var tablepegawai;
 
-        $(document).ready(function() {
+  $(document).ready(function() {
 
     //datatablepegawai = s
-    tablepegawai = $('#tablepegawai').DataTable({ 
+    tablepegawai = $('#tablepegawai').DataTable({
 
-        "processing": true, //Feature control the processing indicator.
-        "serverSide": true, //Feature control DataTables' server-side processing mode.
-        "order": [], //Initial no order.
-        
-        
-        // Load data for the table's content from an Ajax source
-        "ajax": {
-          "url": "<?php echo base_url('admin/pegawai/ajax_list')?>",
-          "type": "POST",
-          "data": function ( data ) {
-            data.satker = $('#satker').val();
-            data.status = $('#status').val();
-            data.sub_kategori = $('#sub_kategori').val();
-            data.kategori = $('#kategori').val();
-            data.rumpun = $('#rumpun').val();
+      "processing": true, //Feature control the processing indicator.
+      "serverSide": true, //Feature control DataTables' server-side processing mode.
+      "order": [], //Initial no order.
 
-          }
+
+      // Load data for the table's content from an Ajax source
+      "ajax": {
+        "url": "<?php echo base_url('admin/pegawai/ajax_list') ?>",
+        "type": "POST",
+        "data": function(data) {
+          data.satker = $('#satker').val();
+          data.status = $('#status').val();
+          data.sub_kategori = $('#sub_kategori').val();
+          data.kategori = $('#kategori').val();
+          data.rumpun = $('#rumpun').val();
+
+        }
+      },
+
+      //Set column definition initialisation properties.
+      "columnDefs": [{
+          "targets": [-1], //last column
+          "orderable": false, //set not orderable
         },
-        
-        //Set column definition initialisation properties.
-        "columnDefs": [
-        { 
-                "targets": [ -1 ], //last column
-                "orderable": false, //set not orderable
-              },
-              { 
-                "targets": [ -2 ], //2 last column (photo)
-                "orderable": false, //set not orderable
-              },
-              ],
+        {
+          "targets": [-2], //2 last column (photo)
+          "orderable": false, //set not orderable
+        },
+      ],
 
-            });
+    });
 
-     $('#btn-cari').click(function(){ //button filter event click
-        tablepegawai.ajax.reload();  //just reload tablepegawai
-      });
-    $('#btn-ulang').click(function(){ //button reset event click
+    $('#btn-cari').click(function() { //button filter event click
+      tablepegawai.ajax.reload(); //just reload tablepegawai
+    });
+    $('#btn-ulang').click(function() { //button reset event click
       $('#form-cari')[0].reset();
-        tablepegawai.ajax.reload();  //just reload tablepegawai
-      });
+      tablepegawai.ajax.reload(); //just reload tablepegawai
+    });
   });
 </script>
 
@@ -299,74 +306,69 @@
   $(document).ready(function() {
 
     //datatabeldiklat = s
-    tabeldiklat = $('#tabeldiklat').DataTable({ 
+    tabeldiklat = $('#tabeldiklat').DataTable({
 
-        "processing": true, //Feature control the processing indicator.
-        "serverSide": true, //Feature control DataTables' server-side processing mode.
-        "order": [], //Initial no order.
+      "processing": true, //Feature control the processing indicator.
+      "serverSide": true, //Feature control DataTables' server-side processing mode.
+      "order": [], //Initial no order.
 
-        // Load data for the table's content from an Ajax source
-        "ajax": {
-          "url": "<?php echo base_url('admin/diklat/ajax_list')?>",
-          "type": "POST",
-          "data": function ( data ) {
-            data.tanggal_mulai = $('#tanggal_mulai').val();
-            data.tanggal_selesai = $('#tanggal_selesai').val();
-            data.diklatih = $('#diklatih').val();
+      // Load data for the table's content from an Ajax source
+      "ajax": {
+        "url": "<?php echo base_url('admin/diklat/ajax_list') ?>",
+        "type": "POST",
+        "data": function(data) {
+          data.tanggal_mulai = $('#tanggal_mulai').val();
+          data.tanggal_selesai = $('#tanggal_selesai').val();
+          data.diklatih = $('#diklatih').val();
 
-          }
-        },
+        }
+      },
 
-        //Set column definition initialisation properties.
-        "columnDefs": [
-        { 
-            "targets": [ 0 ], //first column / numbering column
-            "orderable": false, //set not orderable
-          },
-          ],
+      //Set column definition initialisation properties.
+      "columnDefs": [{
+        "targets": [0], //first column / numbering column
+        "orderable": false, //set not orderable
+      }, ],
 
-        });
+    });
 
-    $('#btn-filter').click(function(){ //button filter event click
-        tabeldiklat.ajax.reload();  //just reload tabeldiklat
-      });
-    $('#btn-reset').click(function(){ //button reset event click
+    $('#btn-filter').click(function() { //button filter event click
+      tabeldiklat.ajax.reload(); //just reload tabeldiklat
+    });
+    $('#btn-reset').click(function() { //button reset event click
       $('#form-filter')[0].reset();
-        tabeldiklat.ajax.reload();  //just reload tabeldiklat
-      });
+      tabeldiklat.ajax.reload(); //just reload tabeldiklat
+    });
 
   });
-
 </script>
 
 <script>
   $(function() {
 
     //datatables
-    $("#tabeltransaksi").DataTable({ 
+    $("#tabeltransaksi").DataTable({
 
-        "processing": true, //Feature control the processing indicator.
-        "serverSide": true, //Feature control DataTables' server-side processing mode.
-        "order": [], //Initial no order.
+      "processing": true, //Feature control the processing indicator.
+      "serverSide": true, //Feature control DataTables' server-side processing mode.
+      "order": [], //Initial no order.
 
-        // Load data for the table's content from an Ajax source
-        "ajax": {
-          "url": "<?php echo base_url('admin/transaksi_pkl/list_transaksi')?>",
-          "type": "POST"
-        },
+      // Load data for the table's content from an Ajax source
+      "ajax": {
+        "url": "<?php echo base_url('admin/transaksi_pkl/list_transaksi') ?>",
+        "type": "POST"
+      },
 
-        //Set column definition initialisation properties.
-        "columnDefs": [
-        { 
-            "targets": [ -1 ], //last column
-            "orderable": false, //set not orderable
-          },
-          ],
+      //Set column definition initialisation properties.
+      "columnDefs": [{
+        "targets": [-1], //last column
+        "orderable": false, //set not orderable
+      }, ],
 
-        });
+    });
   });
-
 </script>
 
 </body>
+
 </html>

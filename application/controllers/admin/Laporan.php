@@ -18,6 +18,7 @@ class Laporan extends CI_Controller
 		$this->load->model('Unit_model');
 		$this->load->model('Brg_keluarkel_model');
 		$this->load->model('Brg_masukkel_model');
+		$this->load->model('Persediaan_model');
 	}
 
 	public function cari_stok()
@@ -148,13 +149,6 @@ class Laporan extends CI_Controller
 		$nama        = $this->Jenis_model->detail($id_jenis);
 		$brg 	     = $this->Brg_masuk_model->pencarian_hasil($tmt, $tmtdua, $id_jenis);
 
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
-		// $jml_masuk   = $this->Brg_masuk_model->get_jumlah_masuk($id_barang,$tmt,$tmtdua);
-		// $jml_keluar  = $this->Brg_keluar_model->get_jumlah_keluar($id_barang,$tmt,$tmtdua);
-		// $brg  		 = $this->Laporan_model->detail();
-
 		if (isset($_POST['tmt'])) {
 			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis'));
 			redirect(base_url('admin/laporan/tampil/' . $periode), 'refresh');
@@ -168,10 +162,7 @@ class Laporan extends CI_Controller
 			'brg' 		 => $brg,
 			'bulan' 	 => $bulan,
 			'tahun'      => $tahun,
-			'tmt' 		 => $tmt,
-			'expired6bulan' => $expired6bln,
-			'expired3bulan' => $expired3bln,
-			'expired1bulan' => $expired1bln,
+			'tmt'        => $tmt,
 			'tmtdua'     => $tmtdua,
 			'jenis'      => $jenis,
 			'id_jenis'   => $id_jenis,
@@ -251,8 +242,8 @@ class Laporan extends CI_Controller
 				);
 
 				$pemakaian_bulanan[$bln] = (isset($keluar_bulan['total']) && $keluar_bulan['total'] != '')
-					? $keluar_bulan['total']
-					: 0;
+				? $keluar_bulan['total']
+				: 0;
 			}
 			$b['pemakaian_bulanan'] = $pemakaian_bulanan;
 		}
@@ -288,12 +279,7 @@ class Laporan extends CI_Controller
 		$satker           = $this->Satker_model->list_pustu();
 		$unit             = $this->Unit_model->listing();
 		$barang 		  = $this->Jenis_model->listing();
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
-		// $unit = $this->Unit_model->listing();
-		// $id_satker = 0;
-		// $id_unit = 0;
+		
 
 
 		if (isset($_POST['tmt'])) {
@@ -308,12 +294,6 @@ class Laporan extends CI_Controller
 			'barang'        => $barang,
 			'satker'        => $satker,
 			'id_satker'     => $id_satker,
-			'expired6bulan'   => $expired6bln,
-			'expired3bulan'   => $expired3bln,
-			'expired1bulan'   => $expired1bln,
-			// 'id_jenis'      => $id_jenis,
-			// 'unit'        	=> $unit,
-			// 'id_unit'       => $id_unit,
 			'isi'           => 'admin/laporan/list_pustu'
 		);
 
@@ -553,6 +533,63 @@ class Laporan extends CI_Controller
 			// 'barang'   	 => $barang,
 			'ada'   	 => $ada,
 			'isi' 		 => 'admin/laporan/laporan_brg'
+		);
+		$this->load->view('admin/layout/wrapper', $data);
+	}
+
+
+
+	public function rekap()
+	{
+		$tmt  		 = date('Y-m-d');
+		$tmtdua  	 = date('Y-m-d');
+		$id_sedia  	 = 1;
+		$bulan	     = date('m', strtotime($tmtdua));
+		$tahun	     = date('Y', strtotime($tmtdua));
+		$brg 	     = $this->Persediaan_model->listing($tmt, $tmtdua);
+
+		if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua'));
+			redirect(base_url('admin/laporan/tampil_sedia/' . $periode), 'refresh');
+		}
+
+
+		$data = array(
+			'title' 	 => 'Laporan ',
+			'brg' 		 => $brg,
+			'id_sedia'   => $id_sedia,
+			'bulan' 	 => $bulan,
+			'tahun'      => $tahun,
+			'tmt' 		 => $tmt,
+			'tmtdua'     => $tmtdua,
+			'isi' 		 => 'admin/rekap/list'
+		);
+		$this->load->view('admin/layout/wrapper', $data);
+	}
+
+
+	public function tampil_sedia()
+	{
+		$tmt  		 = $this->uri->segment(4);
+		$tmtdua  	 = $this->uri->segment(5);
+		$bulan	     = date('m', strtotime($tmtdua));
+		$tahun	     = date('Y', strtotime($tmtdua));
+		$brg 	     = $this->Persediaan_model->listing();
+
+		if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua'));
+			redirect(base_url('admin/laporan/tampil_sedia/' . $periode), 'refresh');
+		}
+
+
+		$data = array(
+			'title' 	 => 'Rekapitulasi Nilai ',
+			'brg' 		 => $brg,
+			'bulan' 	 => $bulan,
+			'tahun'      => $tahun,
+			'tmt' 		 => $tmt,
+			'tmtdua'     => $tmtdua,
+			'isi' 		 => 'admin/rekap/hasil'
 		);
 		$this->load->view('admin/layout/wrapper', $data);
 	}

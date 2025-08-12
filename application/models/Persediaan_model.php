@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Brg_masuk_model extends CI_Model {
+class Persediaan_model extends CI_Model {
 
 	public function __construct() {
 		$this->load->database();
@@ -10,12 +10,9 @@ class Brg_masuk_model extends CI_Model {
 
 	// Listing
 	public function listing() {
-		$this->db->select('barang_masuk.*,ms_barang.nama_barang,ms_satuan.satuan,ms_rekanan.nama_rekanan,ms_barang.id_satuan');
-		$this->db->from('barang_masuk');
-		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
-		$this->db->join('ms_rekanan', 'ms_rekanan.id_rekanan = barang_masuk.id_rekanan', 'left');
-		$this->db->join('ms_satuan', 'ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
-		$this->db->order_by('id_barang_masuk','ASC');
+		$this->db->select('*');
+		$this->db->from('persediaan');
+		$this->db->order_by('id_sedia','ASC');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
@@ -139,7 +136,7 @@ class Brg_masuk_model extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function pencarian_hasil($tmt,$tmtdua,$id_jenis) {
+	public function pencarian_hasil($tmt,$tmtdua) {
 
 		$this->db->select('barang_masuk.*,ms_barang.nama_barang,ms_rekanan.nama_rekanan,ms_satuan.satuan,ms_jenis_barang.nama_jenis,ms_barang.id_barang');
 		$this->db->from('barang_masuk');
@@ -150,29 +147,11 @@ class Brg_masuk_model extends CI_Model {
 		$this->db->where(array(
 			'barang_masuk.tgl_datang >=' => $tmt,
 			'barang_masuk.tgl_datang <=' => $tmtdua));
-		$this->db->where('ms_jenis_barang.id_jenis',$id_jenis);
 		$this->db->order_by('tgl_datang','asc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
-
-	
-
-	// public function cari_barang($tmt,$tmtdua,$id_jenis)
-	// {
-	// 	$this->db->select('ms_barang.*,ms_satuan.satuan,ms_jenis_barang.nama_jenis,barang_masuk.harga,barang_masuk.tgl_datang,barang_masuk.jumlah');
-	// 	$this->db->from('ms_barang');
-	// 	$this->db->join('barang_masuk','barang_masuk.id_barang = ms_barang.id_barang', 'right');
-	// 	$this->db->join('ms_satuan','ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
-	// 	$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
-	// 	$this->db->where('barang_masutgl_datang >=',$tmt);
-	// 	$this->db->where('tgl_datang <=',$tmtdua);
-	// 	$this->db->where('barang_masuk.id_jenis',$id_jenis);
-	// 	$this->db->order_by('nama_barang', 'desc');
-	// 	$query = $this->db->get();
-	// 	return $query->result_array();
-	// }
 
 
 
@@ -195,11 +174,28 @@ class Brg_masuk_model extends CI_Model {
 	}
 
 
-	public function get_jumlah_stok($id_barang,$tmt,$tmtdua)
+	public function get_jumlah_sedia($tmt,$tmtdua,$id_sedia)
 	{
-		$this->db->select('SUM(jumlah) as total');
+		$this->db->select('barang_masuk.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
 		$this->db->from('barang_masuk');
-		$this->db->where('id_barang_masuk',$id_barang);
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('tgl_datang >=',$tmt);
+		$this->db->where('tgl_datang <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_harga_sedia($tmt,$tmtdua,$id_sedia)
+	{
+		$this->db->select('barang_masuk.*,SUM(harga) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
 		$this->db->where('tgl_datang >=',$tmt);
 		$this->db->where('tgl_datang <=',$tmtdua);
 		$query = $this->db->get();
@@ -207,7 +203,39 @@ class Brg_masuk_model extends CI_Model {
 	}
 
 
-	
+	public function get_jml_keluar($tmt,$tmtdua,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_keluar');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('tanggal_minta <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_harga_keluar($tmt,$tmtdua,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,SUM(harga) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_keluar');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('tanggal_minta <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+
+
+
 
 	public function delete($data)
 	{

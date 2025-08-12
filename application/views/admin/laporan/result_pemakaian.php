@@ -71,11 +71,10 @@
           <div class="box-body table-responsive no-padding">
             <div class="box" style="width:99%;">
               <a class="btn btn-block btn-social btn-flickr">
-                <i class="fa fa-linkedin"></i> Laporan Stok
+                Laporan Stok
               </a>
               <br>
-
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="tabel_laporan_pemakaian" class="table table-bordered table-striped">
                 <thead>
                   <tr class="bg-primary text-center">
                     <th rowspan="2" width="37">No</th>

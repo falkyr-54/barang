@@ -47,6 +47,7 @@ class Pjklaster_model extends CI_Model {
 
 	public function now($id_klaster) {
 
+		$list = ['acc_pj','belum','tolak_pj'];
 
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
 		$this->db->from('barang_keluar');
@@ -57,7 +58,7 @@ class Pjklaster_model extends CI_Model {
 		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
 		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
 		$this->db->where('unit_bagian.id_klaster',$id_klaster);
-		$this->db->where('status_validasi','belum');
+		$this->db->where_in('status_validasi',$list);
 		$this->db->order_by('tanggal_minta', 'asc');
 		$query = $this->db->get();
 		return $query->result_array();

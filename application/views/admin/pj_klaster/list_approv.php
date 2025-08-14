@@ -121,7 +121,7 @@ if($this->session->flashdata('sukses')) {
 													<i class="fa fa-calendar-check-o btn btn-info btn-md" disabled> acc pengurus barang</i>
 												<?php }elseif($klast['status_validasi']=="tolak_p"){ ?>
 													<i class="fa fa-calendar-check-o btn btn-info btn-md" disabled> di tolak pengurus barang</i>
-													<?php } ?></i>
+													<?php } ?>
 
 												<?php }else{ ?>
 													<?php

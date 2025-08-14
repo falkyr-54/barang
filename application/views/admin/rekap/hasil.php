@@ -25,8 +25,8 @@
      </div>
    </div>
 
-</div>
-<div class="form-group">
+ </div>
+ <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
     <!-- <button type="submit"  name="submit" class="btn btn-info">Cari</button> -->
     <input type="submit" name="submit" value="Cari" class="btn btn-success btn-md">
@@ -72,59 +72,120 @@
             <?php 
             $i=1; foreach ($brg as $brg) {
 
-
-
               ?>
               <tr>
                 <td><?php echo $i ?></td>
+
                 <td><?php echo $brg['nama_sedia'] ?></td>
-                <td>Saldo</td>
-                <td>  
-                  <?php 
-                  $id_sedia  = $brg['id_sedia'];
-                  $tmt       = $this->uri->segment(4);
-                  $tmtdua    = $this->uri->segment(5);
-                  $total_masuk   = $this->Persediaan_model->get_jumlah_sedia($tmt,$tmtdua,$id_sedia);
-                  $total_harga   = $this->Persediaan_model->get_harga_sedia($tmt,$tmtdua,$id_sedia);
-                  $masuk  = $total_masuk['total'];
-                  $harga  = $total_harga['total'];
-                  $jml = $masuk*$harga;
 
-                  echo 'Rp'.number_format($jml,0,',','.')
-                  ?>
-                </td>
-                <td>
-                  <?php 
-                  $id_sedia  = $brg['id_sedia'];
-                  $tmt       = $this->uri->segment(4);
-                  $tmtdua    = $this->uri->segment(5);
-                  $total_masuk   = $this->Persediaan_model->get_jml_keluar($tmt,$tmtdua,$id_sedia);
-                  $total_harga   = $this->Persediaan_model->get_harga_keluar($tmt,$tmtdua,$id_sedia);
-                  $masuk  = $total_masuk['total'];
-                  $harga  = $total_harga['total'];
-                  $jml = $masuk*$harga;
+                <td><?php
+                $total = 0;
+                $tgl         = date('Y-m-d');
+                // $tmt        = date('Y-01-01', strtotime('-1 year', strtotime($tgl)));
+                $tmtdua     = date('Y-12-31', strtotime('-1 year', strtotime($tgl)));
+                $id_sedia  = $brg['id_sedia'];
+                // $brg_sedia = $this->Persediaan_model->list_jenis();
+                $brg_sedia = $this->Persediaan_model->list_msk();
 
-                  echo 'Rp'.number_format($jml,0,',','.')
-                  ?></td>
-                  <td>akhir</td>
-                  <td>ket</td>
-                </tr>
-                <?php $i++; } ?> 
-              </tbody>
-            </table>
-          </div>
-        </div>
+                foreach ($brg_sedia as $brg_sedia) {
+                 $id_barang_masuk = $brg_sedia['id_barang_masuk'];
+                 // $id_sedia = $brg_sedia['id_sedia'];
+                 $total_masuk   = $this->Persediaan_model->get_jumlah_sedia($tmtdua,$id_barang_masuk,$id_sedia);
+                 $total_keluar  = $this->Persediaan_model->get_jml_keluar($tmtdua,$id_barang_masuk,$id_sedia);
+                 $stok  = $total_masuk['total'] - $total_keluar['total'];
+                 $hrg = $stok*$brg_sedia['harga'];
+                 $total += $hrg;
 
-        <script>
-          $(function() {
-            $( ".datepicker" ).datepicker({
-              changeYear: true,
-              changeMonth: true,
-              yearRange: "2023:<?php echo date('Y') ?>",
-              dateFormat: "yy-mm-dd"
-            });
-          });
-        </script>
+
+                 // $total_masuk   = $this->Persediaan_model->get_harga_sedia($tmtdua,$id_barang,$id_sedia);
+                 // $total_keluar  = $this->Persediaan_model->get_jml_keluar($tmtdua,$id_barang,$id_sedia);
+                 // $stok  = $total_masuk['total'] - $total_keluar['total'];
+
+                 // $subtotal = $brg_sedia['harga'] * $brg_sedia['jumlah'];
+                 // echo $brg_sedia['nama_barang'].":".$hrg."<br>";
+               }
+
+               echo "<strong>Rp. " . number_format($total,0,',','.') . "</strong>";
+               // echo $total;
+               ?>
+
+             </td>
+
+             <td>  
+               <?php
+               $all         = 0;
+               $id_sedia    = $brg['id_sedia'];
+               $tmt         = $this->uri->segment(4);
+               $tmtdua      = $this->uri->segment(5);
+               $brg_sedia   = $this->Persediaan_model->list_sedia($tmt,$tmtdua,$id_sedia);
+               foreach ($brg_sedia as $brg_sedia) {
+                $subtotal = $brg_sedia['harga'] * $brg_sedia['jumlah'];
+                  // echo "Nama barang =".$brg_sedia['nama_barang']."Harga: " . $brg_sedia['harga'] . " × " . $brg_sedia['jumlah'] . " = " . $subtotal . "<br>";
+                $all += $subtotal;
+              }
+
+              echo "<strong>Rp. " . number_format($all,0,',','.') . "</strong>";
+              ?>
+
+            </td>
+
+            <td>
+              <?php
+              $totalan    = 0;
+              $id_sedia   = $brg['id_sedia'];
+              $tmt        = $this->uri->segment(4);
+              $tmtdua     = $this->uri->segment(5);
+              $brg_sedia  = $this->Persediaan_model->list_luar($tmt,$tmtdua,$id_sedia);
+              foreach ($brg_sedia as $brg_sedia) {
+                $subtotal = $brg_sedia['harga'] * $brg_sedia['jumlah_keluar'];
+                  // echo "Nama barang =".$brg_sedia['nama_barang']."Harga: " . $brg_sedia['harga'] . " × " . $brg_sedia['jumlah'] . " = " . $subtotal . "<br>";
+                $totalan += $subtotal;
+              }
+
+              echo "<strong>Rp. " . number_format($totalan,0,',','.') . "</strong>";
+              ?>
+
+
+            </td>
+
+            <td><?php
+            $total      = 0;
+            // $tgl        = date('Y-m-d');
+            $tmt        = $this->uri->segment(4);
+            $tmtdua     = $this->uri->segment(5);
+            $id_sedia   = $brg['id_sedia'];
+            $brg_sedia = $this->Persediaan_model->list_msk();
+
+            foreach ($brg_sedia as $brg_sedia) {
+             $id_barang_masuk = $brg_sedia['id_barang_masuk'];
+             $total_masuk   = $this->Persediaan_model->get_sedia($tmt,$tmtdua,$id_barang_masuk,$id_sedia);
+             $total_keluar  = $this->Persediaan_model->get_keluar($tmt,$tmtdua,$id_barang_masuk,$id_sedia);
+             $stok  = $total_masuk['total'] - $total_keluar['total'];
+             $hrg = $stok*$brg_sedia['harga'];
+             $total += $hrg;
+           }
+
+           echo "<strong>Rp. " . number_format($total,0,',','.') . "</strong>";
+               // echo $total;
+           ?></td>
+           <td>ket</td>
+         </tr>
+         <?php $i++; } ?> 
+       </tbody>
+     </table>
+   </div>
+ </div>
+
+ <script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+      changeYear: true,
+      changeMonth: true,
+      yearRange: "2023:<?php echo date('Y') ?>",
+      dateFormat: "yy-mm-dd"
+    });
+  });
+</script>
 
 
 

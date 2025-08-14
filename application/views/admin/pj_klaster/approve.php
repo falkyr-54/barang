@@ -5,6 +5,7 @@
  			<i class="fa fa-calendar-times-o btn btn-danger btn-md"> <?php echo $klast['status_validasi'] ?></i>
  		<?php }elseif($klast['status_validasi']=="acc_pj"){ ?>
  			<i class="fa fa-calendar-check-o btn btn-success btn-md"> <?php echo $klast['status_validasi'] ?></i>
+ 			
  		<?php } ?>
  	</button>
 

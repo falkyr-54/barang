@@ -17,6 +17,25 @@ class Persediaan_model extends CI_Model {
 		return $query->result_array();
 	}
 
+	public function list_jenis() {
+		$this->db->select('*');
+		$this->db->from('ms_barang');
+		$this->db->order_by('id_barang','ASC');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function list_msk() {
+		$this->db->select('barang_masuk.*,ms_barang.nama_barang,ms_satuan.satuan,ms_rekanan.nama_rekanan,ms_barang.id_satuan');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_rekanan', 'ms_rekanan.id_rekanan = barang_masuk.id_rekanan', 'left');
+		$this->db->join('ms_satuan', 'ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
+		$this->db->order_by('id_barang_masuk','ASC');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
 	public function list_brg($id_barang)
 	{
 		$this->db->select('barang_masuk.*,ms_barang.nama_barang,ms_rekanan.nama_rekanan');
@@ -72,7 +91,7 @@ class Persediaan_model extends CI_Model {
 		return $query ->row_array();
 	}
 	
-		public function detail_brg($id_barang,$id_barang_masuk)
+	public function detail_brg($id_barang,$id_barang_masuk)
 	{
 		$this->db->select('barang_masuk.*,ms_jenis_barang.nama_jenis,ms_satuan.satuan, satker.nama_satker, satker.id_satker, ms_barang.id_barang, ms_barang.nama_barang');
 		$this->db->from('barang_masuk');
@@ -174,19 +193,7 @@ class Persediaan_model extends CI_Model {
 	}
 
 
-	public function get_jumlah_sedia($tmt,$tmtdua,$id_sedia)
-	{
-		$this->db->select('barang_masuk.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
-		$this->db->from('barang_masuk');
-		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
-		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
-		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
-		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
-		$this->db->where('tgl_datang >=',$tmt);
-		$this->db->where('tgl_datang <=',$tmtdua);
-		$query = $this->db->get();
-		return $query->row_array();
-	}
+	
 
 	public function get_harga_sedia($tmt,$tmtdua,$id_sedia)
 	{
@@ -203,20 +210,102 @@ class Persediaan_model extends CI_Model {
 	}
 
 
-	public function get_jml_keluar($tmt,$tmtdua,$id_sedia)
+	public function get_jumlah_sedia($tmtdua,$id_barang_masuk,$id_sedia)
 	{
-		$this->db->select('barang_keluar.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->select('barang_masuk.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('barang_masuk.id_barang_masuk',$id_barang_masuk);
+		// $this->db->where('tgl_datang >=',$tmt);
+		$this->db->where('tgl_datang <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_jml_keluar($tmtdua,$id_barang_masuk,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,SUM(jumlah_keluar) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
 		$this->db->from('barang_keluar');
 		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
 		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
 		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
 		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
 		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
-		$this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('barang_keluar.id_barang_masuk',$id_barang_masuk);
+		// $this->db->where('tanggal_minta >=',$tmt);
 		$this->db->where('tanggal_minta <=',$tmtdua);
 		$query = $this->db->get();
 		return $query->row_array();
 	}
+
+
+
+	public function get_sedia($tmt,$tmtdua,$id_barang_masuk,$id_sedia)
+	{
+		$this->db->select('barang_masuk.*,SUM(jumlah) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('barang_masuk.id_barang_masuk',$id_barang_masuk);
+		// $this->db->where('tgl_datang >=',$tmt);
+		$this->db->where('tgl_datang <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_keluar($tmt,$tmtdua,$id_barang_masuk,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,SUM(jumlah_keluar) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_keluar');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('barang_keluar.id_barang_masuk',$id_barang_masuk);
+		// $this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('tanggal_minta <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+
+	public function get_hrg_sedia($tmtdua,$id_barang,$id_sedia)
+	{
+		$this->db->select('barang_masuk.*,SUM(harga) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('ms_barang.id_barang',$id_barang);
+		// $this->db->where('tgl_datang >=',$tmt);
+		$this->db->where('tgl_datang <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
+	public function get_hrg_keluar($tmtdua,$id_barang,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,SUM(jumlah_keluar) as total,ms_jenis_barang.id_sedia,ms_barang.id_jenis');
+		$this->db->from('barang_keluar');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('ms_barang.id_barang',$id_barang);
+		// $this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('tanggal_minta <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->row_array();
+	}
+
 
 	public function get_harga_keluar($tmt,$tmtdua,$id_sedia)
 	{
@@ -231,6 +320,36 @@ class Persediaan_model extends CI_Model {
 		$this->db->where('tanggal_minta <=',$tmtdua);
 		$query = $this->db->get();
 		return $query->row_array();
+	}
+
+
+	public function list_sedia($tmt,$tmtdua,$id_sedia)
+	{
+		$this->db->select('barang_masuk.*,ms_jenis_barang.id_sedia,ms_barang.id_jenis,ms_barang.nama_barang');
+		$this->db->from('barang_masuk');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('tgl_datang >=',$tmt);
+		$this->db->where('tgl_datang <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+	public function list_luar($tmt,$tmtdua,$id_sedia)
+	{
+		$this->db->select('barang_keluar.*,ms_jenis_barang.id_sedia,ms_barang.id_jenis,ms_barang.nama_barang,barang_masuk.harga,barang_masuk.jumlah');
+		$this->db->from('barang_keluar');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'left');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_masuk.id_barang', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('persediaan', 'persediaan.id_sedia = ms_jenis_barang.id_sedia', 'left');
+		$this->db->where('ms_jenis_barang.id_sedia',$id_sedia);
+		$this->db->where('tanggal_minta >=',$tmt);
+		$this->db->where('tanggal_minta <=',$tmtdua);
+		$query = $this->db->get();
+		return $query->result_array();
 	}
 
 

@@ -86,7 +86,7 @@ class Pj_klaster extends CI_Controller
 			'tmt'           =>  $tmt,
 			'sampai'        =>  $sampai,
 			'klast'         =>  $klast,
-			'status'         =>  $status,
+			'status'         => $status,
 			'id_klaster'    =>  $id_klaster,
 			'id_user_pj'    =>  $id_user_pj,
 			// 'taun'          =>  $taun,

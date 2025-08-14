@@ -221,6 +221,7 @@
 <script>
   $(function() {
     $("#tabel1").DataTable();
+    $("#example1").DataTable();
     $('#tabel2').DataTable({
       "paging": true,
       "lengthChange": false,

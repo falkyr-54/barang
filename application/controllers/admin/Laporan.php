@@ -223,38 +223,60 @@ class Laporan extends CI_Controller
 
 		$barang     = $this->Jenis_model->listing();
 		$nama       = $this->Jenis_model->detail($id_jenis);
-		$brg        = $this->Brg_keluar_model->cari_brg_keluar($tmt, $tmtdua, $id_jenis);
+		$brg        = $this->Brg_keluar_model->cari_brg_keluar_pemakaian($tmt, $tmtdua, $id_jenis);
 
-		// Loop setiap barang untuk ambil data per bulan
 		foreach ($brg as &$b) {
 			$id_barang = $b['id_barang_masuk'];
-			$tahun_laporan = $tahun; // dinamis
+			$tahun_laporan = $tahun;
 
-			$pemakaian_bulanan = array();
+			$masuk_bulanan = [];
+			$keluar_bulanan = [];
+
+			// Ambil sisa stok akhir tahun sebelumnya
+			$masuk_tahun_lalu = $this->Brg_masuk_model->get_jumlah_stok_tahun($id_barang, $tahun_laporan - 1);
+			$keluar_tahun_lalu = $this->Brg_keluar_model->get_jumlah_stok_tahun($id_barang, $tahun_laporan - 1);
+
+			$stok_awal_tahun = $masuk_tahun_lalu - $keluar_tahun_lalu;
+
+			$total_masuk_tahun_ini = 0;
+			$total_keluar_tahun_ini = 0;
+
 			for ($bln = 1; $bln <= 12; $bln++) {
 				$start_date = sprintf('%d-%02d-01', $tahun_laporan, $bln);
 				$end_date   = date('Y-m-t', strtotime($start_date));
 
-				$keluar_bulan = $this->Brg_keluar_model->get_jumlah_stok_per_bulan(
+				// Barang Masuk
+				$masuk = $this->Brg_masuk_model->get_jumlah_stok_per_bulan(
 					$id_barang,
 					$start_date,
 					$end_date
 				);
+				$masuk_bulanan[$bln] = !empty($masuk['total']) ? $masuk['total'] : 0;
+				$total_masuk_tahun_ini += $masuk_bulanan[$bln];
 
-				$pemakaian_bulanan[$bln] = (isset($keluar_bulan['total']) && $keluar_bulan['total'] != '')
-				? $keluar_bulan['total']
-				: 0;
+				// Barang Keluar
+				$keluar = $this->Brg_keluar_model->get_jumlah_stok_per_bulan(
+					$id_barang,
+					$start_date,
+					$end_date
+				);
+				$keluar_bulanan[$bln] = !empty($keluar['total']) ? $keluar['total'] : 0;
+				$total_keluar_tahun_ini += $keluar_bulanan[$bln];
+				// Hitung sisa stok tahun ini
+				$sisa_stok_tahun_ini = $stok_awal_tahun + ($total_masuk_tahun_ini - $total_keluar_tahun_ini);
+				$b['stok_awal_tahun']   = $stok_awal_tahun;
+				$b['masuk_bulanan']     = $masuk_bulanan;
+				$b['keluar_bulanan']    = $keluar_bulanan;
+				$b['sisa_stok_tahun']   = $sisa_stok_tahun_ini;
 			}
-			$b['pemakaian_bulanan'] = $pemakaian_bulanan;
 		}
-		unset($b);
 
-		if (isset($_POST['tmt'])) {
-			$periode = ($this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis'));
+		if ($this->input->post('tmt')) {
+			$periode = $this->input->post('tmt') . '/' . $this->input->post('tmtdua') . '/' . $this->input->post('id_jenis');
 			redirect(base_url('admin/laporan/tampil_pemakaian/' . $periode), 'refresh');
 		}
 
-		$data = array(
+		$data = [
 			'title'     => 'Laporan Pemakaian ' . $nama['nama_jenis'],
 			'brg'       => $brg,
 			'bulan'     => $bulan,
@@ -264,7 +286,7 @@ class Laporan extends CI_Controller
 			'barang'    => $barang,
 			'id_jenis'  => $id_jenis,
 			'isi'       => 'admin/laporan/result_pemakaian'
-		);
+		];
 		$this->load->view('admin/layout/wrapper', $data);
 	}
 
@@ -279,7 +301,7 @@ class Laporan extends CI_Controller
 		$satker           = $this->Satker_model->list_pustu();
 		$unit             = $this->Unit_model->listing();
 		$barang 		  = $this->Jenis_model->listing();
-		
+
 
 
 		if (isset($_POST['tmt'])) {

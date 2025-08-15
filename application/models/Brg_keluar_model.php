@@ -192,7 +192,7 @@ class Brg_keluar_model extends CI_Model
 	{
 		$this->db->select_sum('jumlah_keluar', 'total');
 		$this->db->from('barang_keluar');
-		$this->db->where('id_barang_masuk', $id_barang);
+		$this->db->where('id_barang', $id_barang);
 		$this->db->where('tanggal_minta >=', $start_date);
 		$this->db->where('tanggal_minta <=', $end_date);
 		$query = $this->db->get();
@@ -235,6 +235,38 @@ class Brg_keluar_model extends CI_Model
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+	public function cari_brg_keluar_pemakaian($tmt, $tmtdua, $id_jenis)
+	{
+		$this->db->select('barang_keluar.*,ms_barang.nama_barang,ms_satuan.satuan,ms_jenis_barang.nama_jenis,barang_masuk.harga,satker.nama_satker,unit_bagian.unit,ms_barang.id_barang,barang_masuk.harga_satuan');
+		$this->db->from('barang_keluar');
+		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+		$this->db->join('barang_masuk', 'barang_masuk.id_barang_masuk = barang_keluar.id_barang_masuk', 'inner');
+		$this->db->join('ms_satuan', 'ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
+		$this->db->join('ms_jenis_barang', 'ms_jenis_barang.id_jenis = ms_barang.id_jenis', 'left');
+		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
+		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
+		$this->db->where('tanggal_minta >=', $tmt);
+		$this->db->where('tanggal_minta <=', $tmtdua);
+		$this->db->where('ms_jenis_barang.id_jenis', $id_jenis);
+		$this->db->group_by('barang_keluar.id_barang_masuk');
+		$this->db->order_by('tanggal_minta', 'asc');
+		$query = $this->db->get();
+		return $query->result_array();
+	}
+
+
+	public function get_jumlah_stok_tahun($id_barang, $tahun)
+	{
+		$this->db->select_sum('jumlah_keluar', 'total');
+		$this->db->from('barang_keluar');
+		$this->db->where('id_barang', $id_barang);
+		$this->db->where('YEAR(tanggal_minta)', $tahun);
+		$query = $this->db->get();
+		return (int) $query->row()->total;
+	}
+
+
 
 	public function pencarian_hasil($tmt, $tmtdua, $id_unit)
 	{

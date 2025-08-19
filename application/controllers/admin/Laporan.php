@@ -215,9 +215,33 @@ class Laporan extends CI_Controller
 
 	public function tampil_pemakaian()
 	{
+
+		// Cek apakah ada POST dari form
+		if ($this->input->post('tahun')) {
+			$tahun    = $this->input->post('tahun');
+			$id_jenis = $this->input->post('id_jenis');
+
+			// Buat range tanggal berdasarkan tahun
+			$tmt    = $tahun . '-01-01';
+			$tmtdua = $tahun . '-12-31';
+
+			// Redirect supaya tetap konsisten dengan segment
+			redirect(base_url('admin/laporan/tampil_pemakaian/' . $tmt . '/' . $tmtdua . '/' . $id_jenis), 'refresh');
+			return;
+		}
+
+
 		$tmt        = $this->uri->segment(4);
 		$tmtdua     = $this->uri->segment(5);
 		$id_jenis   = $this->uri->segment(6);
+
+		// Amankan: jika kosong, default ke tahun berjalan
+		if (!$tmt || !$tmtdua) {
+			$tahun   = date('Y');
+			$tmt     = $tahun . '-01-01';
+			$tmtdua  = $tahun . '-12-31';
+		}
+
 		$bulan      = date('m', strtotime($tmtdua));
 		$tahun      = date('Y', strtotime($tmtdua));
 

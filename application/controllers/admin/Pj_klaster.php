@@ -10,6 +10,7 @@ class Pj_klaster extends CI_Controller
 		parent::__construct();
 		$this->load->model('Pjklaster_model');
 		$this->load->model('Brg_keluar_model');
+		$this->load->model('Admin_brg_model');
 		$this->load->model('Tahun_model');
 	}
 
@@ -155,21 +156,21 @@ class Pj_klaster extends CI_Controller
 		redirect(base_url('admin/pj_klaster/cari_approval/'));
 	}
 
-	public function pencarian()
+	public function pencarian_klast()
 	{
 		$tmt         = $this->uri->segment(4);
 		$sampai      = $this->uri->segment(5);
 		$status      = $this->uri->segment(6);
 		$id_klaster  = $this->session->userdata('id_klaster');
-		$klast       = $this->Brg_keluar_model->pencarian($tmt,$sampai,$id_klaster,$status);
+		$klast       = $this->Pjklaster_model->pencarian_klast($tmt,$sampai,$status,$id_klaster);
 
 		if(isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0')
 		{
 			$periode = ($this->input->post('tmt').'/'.$this->input->post('sampai').'/'.$this->input->post('status_validasi').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/pencarian/'.$periode),'refresh');
+			redirect(base_url('admin/pj_klaster/pencarian_klast/'.$periode),'refresh');
 		}else if(isset($_POST['tmt'])) {
 			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/cari_klast/' . $periode), 'refresh');
+			redirect(base_url('admin/pj_klaster/cari_klaster/' . $periode), 'refresh');
 		}
 
 
@@ -186,22 +187,22 @@ class Pj_klaster extends CI_Controller
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
 
-	public function cari_klast()
+	public function cari_klaster()
 	{
 		$tmt         = $this->uri->segment(4);
 		$sampai      = $this->uri->segment(5);
 		$status      = $this->uri->segment(6);
 		$id_klaster  = $this->session->userdata('id_klaster');
-		$klast       = $this->Brg_keluar_model->cari_klast($tmt,$sampai,$id_klaster);
+		$klast       = $this->Pjklaster_model->cari_klaster($tmt,$sampai,$id_klaster);
 
 		
 		if(isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0')
 		{
 			$periode = ($this->input->post('tmt').'/'.$this->input->post('sampai').'/'.$this->input->post('status_validasi').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/pencarian/'.$periode),'refresh');
+			redirect(base_url('admin/pj_klaster/pencarian_klast/'.$periode),'refresh');
 		}else if(isset($_POST['tmt'])) {
 			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/cari_klast/' . $periode), 'refresh');
+			redirect(base_url('admin/pj_klaster/cari_klaster/' . $periode), 'refresh');
 		}
 
 

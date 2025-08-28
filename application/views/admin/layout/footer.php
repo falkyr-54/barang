@@ -222,6 +222,7 @@
   $(function() {
     $("#tabel1").DataTable();
     $("#example1").DataTable();
+        $("#tabelunit").DataTable();
     $('#tabel2').DataTable({
       "paging": true,
       "lengthChange": false,
@@ -232,6 +233,14 @@
     });
   });
 </script>
+
+<script>
+$(document).ready(function() {
+    $('#tabelku').DataTable({
+    });
+});
+</script>
+
 
 <script>
   $(function() {

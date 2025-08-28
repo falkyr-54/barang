@@ -9,14 +9,18 @@ class Barang_unit extends CI_Controller
   {
     parent::__construct();
     $this->load->model('barang_unit_model');
+    $this->load->model('pegawai_barang_model');
   }
 
   // Index
   public function index()
   {
 
+    $id_pegawai = $this->session->userdata('id_pegawai');
     $id_unit = $this->session->userdata('id_unit');
-    $keluar  = $this->barang_unit_model->list_brgku($id_unit);
+    $detail_p   = $this->pegawai_barang_model->detail($id_pegawai);
+    // $id_unit    = $detail_p['id_unit'];
+    $keluar     = $this->barang_unit_model->list_brgku($id_unit);
 
     $data = array(
       'title'    => 'Data Barang Keluar',

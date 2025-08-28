@@ -23,7 +23,7 @@ class Barang_unit_model extends CI_Model
 
 	public function list_brgku($id_unit)
 	{
-		$this->db->select('barang_keluar.*,ms_barang.nama_barang,pegawai_barang.nama_lengkap,satker.nama_satker,unit_bagian.unit');
+		$this->db->select('barang_keluar.*,ms_barang.nama_barang,pegawai_barang.nama_lengkap,satker.nama_satker,unit_bagian.unit,barang_keluar.status_validasi');
 		$this->db->from('barang_keluar');
 		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
 		$this->db->join('pegawai_barang', 'pegawai_barang.id_pegawai = barang_keluar.id_pegawai', 'left');

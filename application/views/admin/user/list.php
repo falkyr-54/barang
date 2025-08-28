@@ -19,6 +19,7 @@ if($this->session->flashdata('sukses')) {
       <th>Nomor</th>
       <th>Nama User</th>
       <th>Username</th>
+      <th>Ruangan</th>
       <th>Akses</th>
       <th>Action</th>
     </tr>
@@ -29,6 +30,7 @@ if($this->session->flashdata('sukses')) {
       <td><?php echo $i ?></td>
       <td><?php echo $user['nama_user'] ?></td>
       <td><?php echo $user['username'] ?></td>
+      <td><?php echo $user['unit'] ?></td>
       <td><?php echo $user['akses_level'] ?></td>
       <td>  
         <a href="<?php echo base_url('admin/user/edit/'.$user['id_user']) ?>" class="btn btn-primary btn-sm">

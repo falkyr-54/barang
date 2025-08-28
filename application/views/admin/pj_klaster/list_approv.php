@@ -39,7 +39,7 @@ if($this->session->flashdata('sukses')) {
 	<div class="panel-body">
 
 
-		<form class="form-horizontal" name="form1" method="post" action="<?php echo base_url('admin/pj_klaster/pencarian/'.$tmt.'/'.$sampai.'/'.$status.'/'.$id_klaster) ?>" enctype="multipart/form-data">
+		<form class="form-horizontal" name="form1" method="post" action="<?php echo base_url('admin/pj_klaster/pencarian_klast/'.$tmt.'/'.$sampai.'/'.$status.'/'.$id_klaster) ?>" enctype="multipart/form-data">
 
 			<div class="box-body">
 				<div class="form-group">

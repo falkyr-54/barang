@@ -19,29 +19,29 @@ class Pegawai_model extends CI_Model {
 
 
   //detail
-   public function detail($id_pegawai) {
-     $query=$this->db->get_where('pegawai',array('id_pegawai'=>$id_pegawai));
-     return $query->row_array();
-   }
+  public function detail($id_pegawai) {
+   $query=$this->db->get_where('pegawai',array('id_pegawai'=>$id_pegawai));
+   return $query->row_array();
+ }
 
 
    //tambah
-   public function tambah($data)
-   {
-    $this->db->insert('pegawai',$data);
-   }
+ public function tambah($data)
+ {
+  $this->db->insert('pegawai',$data);
+}
 
    //edit
-  public function edit($data)
-  {
-    $this->db->where('id_pegawai',$data['id_pegawai']);
-    $this->db->update('pegawai',$data);
-  }
+public function edit($data)
+{
+  $this->db->where('id_pegawai',$data['id_pegawai']);
+  $this->db->update('pegawai',$data);
+}
 
   //hapus
-  public function delete($data)
-  {
-    $this->db->where('id_pegawai',$data['id_pegawai']);
-    $this->db->delete('pegawai',$data);
-  }
+public function delete($data)
+{
+  $this->db->where('id_pegawai',$data['id_pegawai']);
+  $this->db->delete('pegawai',$data);
+}
 }

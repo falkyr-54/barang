@@ -37,17 +37,17 @@ if($this->session->flashdata('sukses')) {
         <input type="text" name="unit" class="form-control" value="<?php echo $pegawai['unit'] ?>" placeholder="Cari nama unit..." required id="unit">
       </div> -->
 
-      <div class="form-group" hidden="">
+      <div class="form-group">
         <label>Id unit</label>
         <input type="text" name="id_unit" class="form-control" value="<?php echo $pegawai['id_unit'] ?>" placeholder="" required id="id_unit" readonly>
       </div>
 
-      <div class="form-group" hidden="">
+      <div class="form-group">
         <label>id pegawai</label>
         <input type="text" name="id_pegawai" class="form-control" value="<?php echo $pegawai['id_pegawai'] ?>" placeholder="" required id="id_pegawai" readonly>
       </div>
 
-       <div class="form-group" hidden="">
+       <div class="form-group">
         <label>id satker</label>
         <input type="text" name="id_satker" class="form-control" value="<?php echo $pegawai['id_satker'] ?>" placeholder="" required id="id_pegawai" readonly>
       </div>
@@ -60,11 +60,14 @@ if($this->session->flashdata('sukses')) {
         <input type="text" name="nama_barang" class="form-control" placeholder="Cari ..." value="<?php echo $barang['nama_barang'] ?>" required id="nama_barang" readonly>
       </div>
 
-      <div class="form-group" hidden="">
-        <input type="hidden" class="form-control" name="id_barang" value="<?php echo $barang['id_barang'] ?>" id="id_barang" readonly>
+
+      <div class="form-group">
+        <label>id Barang</label>
+        <input type="text" class="form-control" name="id_barang" value="<?php echo $barang['id_barang'] ?>" id="id_barang" readonly>
       </div>
 
-      <div class="form-group" hidden="">
+      <div class="form-group">
+        <label>id jenis barang</label>
         <input type="text" class="form-control" name="id_jenis" value="<?php echo $barang['id_jenis'] ?>" id="id_jenis" readonly>
       </div>
 

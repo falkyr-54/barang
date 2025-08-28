@@ -42,6 +42,26 @@ if(isset($error)) {
             <input type="text" name="nama_user" class="form-control" value="<?php echo $user['nama_lengkap'] ?>" placeholder="Cari nama pegawai..." required id="nama_lengkap">
           </div>
 
+          <div class="form-group has-warning">
+            <label>Klaster</label>
+            <select name="id_klaster" id="id_klaster" class="form-control" required>
+              <option value="">-- Pilih Klaster --</option>
+              <?php foreach ($klaster as $k) { ?>
+                <option value="<?php echo $k['id_klaster']; ?>">
+                  <?php echo $k['nama']; ?>
+                </option>
+              <?php } ?>
+            </select>
+          </div>
+
+          <div class="form-group has-warning">
+            <label>Unit/Ruangan</label>
+            <select name="id_unit" id="id_unit" class="form-control" required>
+              <option value="">-- Pilih Unit --</option>
+            </select>
+          </div>
+
+
           <div class="form-group" hidden="">
             <label>ID</label>
             <input type="hidden" name="id_pegawai" class="form-control" value="<?php echo $user['id_pegawai'] ?>" placeholder="NIP pegawai Pengganti" required id="id_pegawai" readonly>
@@ -52,6 +72,7 @@ if(isset($error)) {
             <select class="form-control" name="akses_level">
               <option value="admin" <?php if ($user['akses_level']=="admin") { echo "Selected"; } ?>>admin</option>
               <option value="kelurahan" <?php if ($user['akses_level']=="kelurahan") { echo "Selected"; } ?>>kelurahan</option>
+              <option value="admin_poli" <?php if ($user['akses_level']=="admin_poli") { echo "Selected"; } ?>>admin unit</option>
             </option>
           </select>
         </div>
@@ -111,4 +132,25 @@ if(isset($error)) {
     });
   }); 
 </script>  
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('#id_klaster').change(function(){
+        var id_klaster = $(this).val();
+        if(id_klaster != ''){
+            $.ajax({
+                url:"<?php echo base_url('admin/user/get_unit_by_klaster'); ?>",
+                method:"POST",
+                data:{id_klaster:id_klaster},
+                success:function(data){
+                    $('#id_unit').html(data);
+                }
+            });
+        } else {
+            $('#id_unit').html('<option value="">-- Pilih Unit --</option>');
+        }
+    });
+});
+</script>
 

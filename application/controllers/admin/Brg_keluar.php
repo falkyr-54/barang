@@ -137,7 +137,7 @@ class Brg_keluar extends CI_Controller
     $rekanan          = $this->Rekanan_model->listing();
     $satker           = $this->Satker_model->listing();
     $unit             = $this->Unit_model->listing();
- 
+
 
     // print_r($diskusi);die;
 
@@ -194,7 +194,7 @@ class Brg_keluar extends CI_Controller
 
     $nama = trim($this->input->get('term')); //get term parameter sent via text field. Not sure how secure get() is
 
-    $this->db->select('nama_lengkap,id_pegawai,id_unit');
+    $this->db->select('nama_lengkap,id_pegawai,id_satker');
     $this->db->from('pegawai_barang');
     $this->db->like('nama_lengkap', $nama);
     $this->db->limit('5');
@@ -210,7 +210,7 @@ class Brg_keluar extends CI_Controller
         $data['message'][] = array(
           'label'  => $row->nama_lengkap,
           'value'  => $row->id_pegawai,
-          'depan'  => $row->id_unit,
+          'depan'  => $row->id_satker,
         );
       }
     } else {

@@ -27,12 +27,14 @@ class Simple_login {
 			$id_satker	= $admin->id_satker;
 			$id_unit	= $admin->id_unit;
 			$id_klaster	= $admin->id_klaster;
+			$id_pegawai	= $admin->id_pegawai;
 			$this->CI->session->set_userdata('username', $username); 
 			$this->CI->session->set_userdata('nama_user', $nama_user);
 			$this->CI->session->set_userdata('level', $level);  
 			$this->CI->session->set_userdata('id_satker', $id_satker);  
 			$this->CI->session->set_userdata('id_unit', $id_unit);  
 			$this->CI->session->set_userdata('id_klaster', $id_klaster);  
+			$this->CI->session->set_userdata('id_pegawai', $id_pegawai);  
 			$this->CI->session->set_userdata('id_login', uniqid(rand()));
 			$this->CI->session->set_userdata('id', $id);
 			// Kalau benar di redirect

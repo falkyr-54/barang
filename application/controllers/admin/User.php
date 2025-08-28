@@ -20,15 +20,9 @@ class User extends CI_Controller
 
 		$user = $this->user_model->listing();
 
-		$expired6bulan = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bulan = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bulan = $this->Brg_keluar_model->list_expired1bulan();
 		$data = array(
 			'title'			=> 'Data User',
 			'user'			=>	$user,
-			'expired6bulan'	=> $expired6bulan,
-			'expired3bulan'	=> $expired3bulan,
-			'expired1bulan'	=> $expired1bulan,
 			'isi'			=> 'admin/user/list'
 		);
 		$this->load->view('admin/layout/wrapper', $data);
@@ -38,13 +32,12 @@ class User extends CI_Controller
 	{
 		$satker	 = $this->satker_model->listing();
 		$klaster = $this->klaster_model->listing();
-		// $expired6bulan = $this->Brg_keluar_model->list_expired6bulan();
-		// $expired3bulan = $this->Brg_keluar_model->list_expired3bulan();
-		// $expired1bulan = $this->Brg_keluar_model->list_expired1bulan();
+		$klaster = $this->klaster_model->listing();
+
 		// Validasi
 		$valid = $this->form_validation;
 
-		$valid->set_rules('nama_user', 'Username', 'required', array('required' => 'Username Harus diisi'));
+		$valid->set_rules('username', 'Username', 'required', array('required' => 'Username Harus diisi'));
 
 		$valid->set_rules('akses_level', 'Akses Level', 'required', array('required' => 'Akses Level Harus diisi'));
 
@@ -54,9 +47,6 @@ class User extends CI_Controller
 				'title'		=> 'Tambahkan Data User',
 				'satker'	=> $satker,
 				'klaster'	=> $klaster,
-				// 'expired6bulan'	=> $expired6bulan,
-				// 'expired3bulan'	=> $expired3bulan,
-				// 'expired1bulan'	=> $expired1bulan,
 				'isi'		=> 'admin/user/tambah'
 			);
 			$this->load->view('admin/layout/wrapper', $data);
@@ -66,6 +56,7 @@ class User extends CI_Controller
 			$i 	= $this->input;
 			$data = array(
 				'id_satker'			=> $i->post('id_satker'),
+				'id_unit'		   	=> $i->post('id_unit'),
 				'id_klaster'		=> $i->post('id_klaster'),
 				'username'			=> $i->post('username'),
 				'nama_user'			=> $i->post('nama_user'),
@@ -87,17 +78,13 @@ class User extends CI_Controller
 
 		$user          = $this->user_model->detail($id_user);
 		$satker        = $this->satker_model->listing();
-		$expired6bulan = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bulan = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bulan = $this->Brg_keluar_model->list_expired1bulan();
+		$klaster        = $this->klaster_model->listing();
 
 		$data = array(
 			'title'		=> 'Edit User',
 			'user'	      => $user,
 			'satker'      => $satker,
-			'expired6bulan'	=> $expired6bulan,
-			'expired3bulan'	=> $expired3bulan,
-			'expired1bulan'	=> $expired1bulan,
+			'klaster'      => $klaster,
 			'isi'		  => 'admin/user/edit'
 		);
 		$this->load->view('admin/layout/wrapper', $data);
@@ -124,6 +111,8 @@ class User extends CI_Controller
 			$data = array(
 				'id_user'	      		 => $id_user,
 				'id_satker'		   		 => $i->post('id_satker'),
+				'id_unit'		   		 => $i->post('id_unit'),
+				'id_klaster'		   	 => $i->post('id_klaster'),
 				'id_pegawai'		   	 => $i->post('id_pegawai'),
 				'nama_user'			 	 => $i->post('nama_user'),
 				'akses_level'			 => $i->post('akses_level'),
@@ -139,6 +128,22 @@ class User extends CI_Controller
 		}
 	}
 
+	
+
+
+	public function get_unit_by_klaster()
+	{
+		$id_klaster = $this->input->post('id_klaster');
+		
+    // sesuaikan dengan nama kolom di unit_bagian
+		$units = $this->db->get_where('unit_bagian', ['id_klaster' => $id_klaster])->result();
+
+		$output = '<option value="">-- Pilih Unit --</option>';
+		foreach ($units as $u) {
+			$output .= '<option value="'.$u->id_unit.'">'.$u->unit.'</option>';
+		}
+		echo $output;
+	}
 	public function delete($id_user)
 	{
 
@@ -147,4 +152,5 @@ class User extends CI_Controller
 		$this->session->set_flashdata('sukses', 'Data berhasil dihapus');
 		redirect(base_url('admin/user/'));
 	}
+
 }

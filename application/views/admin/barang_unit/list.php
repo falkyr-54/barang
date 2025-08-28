@@ -22,62 +22,60 @@ if($this->session->flashdata('sukses')) {
     </a>
     <br>
 
-    <table id="tabel1" class="table table-bordered table-striped">
+    <table id="tabelku" class="table table-bordered table-striped">
       <thead>
 
        <tr class="bg-primary">
-         <th width="37">No</th>
-         <th width="138">Nama Barang</th>
-         <th width="138">Nomor Seri</th>
-         <th width="138">AKL/AKD</th>
-         <th width="138">Daya</th>
-         <th width="138">Nama Pegawai</th>
-         <th width="138">Tanggal</th>
-         <th width="375">Jumlah</th>
-         <th width="375">Satker</th>
-         <th width="375">Unit</th>
-         <th width="375">keterangan</th>
-         <th width="138">status validasi</th>
-         <th width="376">Aksi</th>
+         <th width>No</th>
+         <th width>Nama Barang</th>
+        <!--  <th width>Nomor Seri</th>
+         <th width>AKL/AKD</th>
+         <th width>Daya</th> -->
+         <th width>Nama Pegawai</th>
+         <th width>Tanggal</th>
+         <th width>Jumlah</th>
+         <th width>Satker</th>
+         <th width>Unit</th>
+         <th width>keterangan</th>
+         <th width>status validasi</th>
        </tr>
      </thead>
 
      <tbody>
-      <tr>
-       <?php $i=1; foreach ($keluar as $keluar) { ?>
-        <td><?php echo $i ?></td>
-        <td><?php echo $keluar['nama_barang'] ?></td>
-        <td><?php echo $keluar['seri'] ?></td>
-        <td><?php echo $keluar['akl'] ?></td>
-        <td><?php echo $keluar['daya'] ?></td>
-        <td><?php echo $keluar['nama_lengkap'] ?></td>
-        <td><?php echo $keluar['tanggal_minta'] ?></td>
-        <td><?php echo $keluar['jumlah_keluar'] ?></td>
-        <td><?php echo $keluar['nama_satker'] ?></td>
-        <td><?php echo $keluar['unit'] ?></td>
-        <td><?php echo $keluar['keterangan'] ?></td>
-        <td> <?php  
-        $statusMap = [
-          'tolak_pj' => ['fa-calendar-times-o', 'danger', 'di tolak PJ'],
-          'acc_pj'   => ['fa-calendar-check-o', 'warning', 'acc PJ'],
-          'acc_p'    => ['fa-calendar-check-o', 'info', 'acc pengurus barang'],
-          'tolak_p'  => ['fa-calendar-check-o', 'info', 'di tolak pengurus barang'],
-          'belum'    => ['fa-calendar-check-o', 'danger', 'belum acc']
-        ];
+       <?php $i=1; foreach ($keluar as $row) { ?>
+        <tr>
+          <td><?php echo $i ?></td>
+          <td><?php echo $row['nama_barang'] ?></td>
+         <!--  <td><?php echo $row['seri'] ?></td>
+          <td><?php echo $row['akl'] ?></td>
+          <td><?php echo $row['daya'] ?></td> -->
+          <td><?php echo $row['nama_lengkap'] ?></td>
+          <td><?php echo $row['tanggal_minta'] ?></td>
+          <td><?php echo $row['jumlah_keluar'] ?></td>
+          <td><?php echo $row['nama_satker'] ?></td>
+          <td><?php echo $row['unit'] ?></td>
+          <td><?php echo $row['keterangan'] ?></td>
+          <td>
+            <?php  
+            $statusMap = [
+              'tolak_pj' => ['fa-calendar-times-o', 'danger', 'di tolak PJ'],
+              'acc_pj'   => ['fa-calendar-check-o', 'warning', 'acc PJ'],
+              'acc_p'    => ['fa-calendar-check-o', 'info', 'acc pengurus barang'],
+              'tolak_p'  => ['fa-calendar-check-o', 'info', 'di tolak pengurus barang'],
+              'belum'    => ['fa-calendar-check-o', 'danger', 'belum acc']
+            ];
 
-        if (isset($statusMap[$keluar['status_validasi']])) {
-          list($icon, $color, $text) = $statusMap[$keluar['status_validasi']];
-          echo '<i class="fa ' . $icon . ' btn btn-' . $color . ' btn-md" disabled> ' . $text . '</i>';
-
-
-        } ?>
-
-      </td>
-    </tr>
-    <?php $i++; } ?> 
-  </tbody>
-</table>
-</div>
+            if (isset($statusMap[$row['status_validasi']])) {
+              list($icon, $color, $text) = $statusMap[$row['status_validasi']];
+              echo '<i class="fa ' . $icon . ' btn btn-' . $color . ' btn-md" disabled> ' . $text . '</i>';
+            }
+            ?>
+          </td>
+        </tr>
+        <?php $i++; } ?>
+      </tbody>
+    </table>
+  </div>
 </div>
 <!-- end riwayat rotasi -->
 

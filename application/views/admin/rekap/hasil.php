@@ -79,12 +79,12 @@
                 <td><?php echo $brg['nama_sedia'] ?></td>
 
                 <td><?php
+                // $tmt        = date('Y-01-01', strtotime('-1 year', strtotime($tgl)));
+                // $brg_sedia = $this->Persediaan_model->list_jenis();
                 $total = 0;
                 $tgl         = date('Y-m-d');
-                // $tmt        = date('Y-01-01', strtotime('-1 year', strtotime($tgl)));
                 $tmtdua     = date('Y-12-31', strtotime('-1 year', strtotime($tgl)));
                 $id_sedia  = $brg['id_sedia'];
-                // $brg_sedia = $this->Persediaan_model->list_jenis();
                 $brg_sedia = $this->Persediaan_model->list_msk();
 
                 foreach ($brg_sedia as $brg_sedia) {
@@ -93,6 +93,7 @@
                  $total_masuk   = $this->Persediaan_model->get_jumlah_sedia($tmtdua,$id_barang_masuk,$id_sedia);
                  $total_keluar  = $this->Persediaan_model->get_jml_keluar($tmtdua,$id_barang_masuk,$id_sedia);
                  $stok  = $total_masuk['total'] - $total_keluar['total'];
+                 
                  $hrg = $stok*$brg_sedia['harga'];
                  $total += $hrg;
 

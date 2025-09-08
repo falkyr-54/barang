@@ -25,7 +25,7 @@ class Simple_login {
 			$nama		= $admin->nama_user;
 			$level		= $admin->akses_level;
 			$id_satker	= $admin->id_satker;
-			$id_unit	= $admin->id_unit;
+			$id_unit	= $admin->id_unit:
 			$id_klaster	= $admin->id_klaster;
 			$id_pegawai	= $admin->id_pegawai;
 			$this->CI->session->set_userdata('username', $username); 

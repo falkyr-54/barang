@@ -10,20 +10,22 @@ class Barang_unit extends CI_Controller
     parent::__construct();
     $this->load->model('barang_unit_model');
     $this->load->model('pegawai_barang_model');
+    $this->load->model('user_model');
   }
 
   // Index
   public function index()
   {
 
-    $id_pegawai = $this->session->userdata('id_pegawai');
-    $id_unit = $this->session->userdata('id_unit');
-    $detail_p   = $this->pegawai_barang_model->detail($id_pegawai);
-    // $id_unit    = $detail_p['id_unit'];
+    $id_user = $this->session->userdata('id');
+    // $id_unit    = $this->session->userdata('id_unit');
+    // $detail_p   = $this->pegawai_barang_model->detail($id_pegawai);
+    $pegawai    = $this->user_model->detail($id_user);
+    $id_unit    = $pegawai['id_unit'];
     $keluar     = $this->barang_unit_model->list_brgku($id_unit);
 
     $data = array(
-      'title'    => 'Data Barang Keluar',
+      'title'    => 'Data Barang Keluar'.''.$id_unit,
       'keluar'   => $keluar,
       'isi'      => 'admin/barang_unit/list'
     );

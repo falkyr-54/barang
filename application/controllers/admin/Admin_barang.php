@@ -25,7 +25,7 @@ class admin_barang extends CI_Controller
 		$tahun 		= date('Y');
 		$status 	= 'belum';
 		$id_user_admin = $this->session->userdata('id');
-		$klast      = $this->Admin_brg_model->now($bulan,$tahun);
+		$klast      = $this->Admin_brg_model->now();
 
 		// $taun       = $this->tahun_model->list_thn();
 

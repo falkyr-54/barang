@@ -48,7 +48,7 @@ class Admin_brg_model extends CI_Model {
 
 	public function now() {
 
-		// $bagian = array('acc_pj','acc_p','tolak_p');
+		$bagian = array('acc_pj','acc_p','tolak_p','tolak_p','selesai');
 
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
 		$this->db->from('barang_keluar');
@@ -58,7 +58,7 @@ class Admin_brg_model extends CI_Model {
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
 		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
 		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
-		$this->db->where_in('status_validasi','acc_pj');
+		$this->db->where_in('status_validasi',$bagian);
 		$this->db->order_by('tanggal_minta', 'asc');
 		$query = $this->db->get();
 		return $query->result_array();

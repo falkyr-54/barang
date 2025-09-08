@@ -1,13 +1,18 @@
 <!-- Button trigger modal -->
-<p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-  <i class="fa fa-plus"></i> Tambah unit
-</button></p>
+<p>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    <i class="fa fa-plus"></i> Tambah unit
+  </button>
+</p>
+
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
         <h4 class="modal-title" id="myModalLabel">Tambah unit</h4>
       </div>
       <div class="modal-body">
@@ -16,10 +21,22 @@
             
             <div class="col-md-6">
               <div class="form-group">
-                <div class="form-group">
-                  <label>unit</label>
-                  <input type="text" name="unit" class="form-control" value="<?php echo set_value('unit') ?>" placeholder="isi unit" required>
-                </div>
+                <label>Unit</label>
+                <input type="text" name="unit" class="form-control" value="<?php echo set_value('unit') ?>" placeholder="isi unit" required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Pilih Klaster</label>
+                <select name="id_klaster" class="form-control" required>
+                  <option value="">-- Pilih Klaster --</option>
+                  <?php foreach($klaster as $k) { ?>
+                    <option value="<?php echo $k['id_klaster'] ?>">
+                      <?php echo $k['nama'] ?>
+                    </option>
+                  <?php } ?>
+                </select>
               </div>
             </div>
             

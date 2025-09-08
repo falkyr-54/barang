@@ -69,10 +69,11 @@ class Pj_klaster extends CI_Controller
 		$sampai 	= date('Y-m-31');
 		$bulan 		= date('m');
 		$tahun 		= date('Y');
-		$id_user_pj = $this->session->userdata('id');
-		$id_klaster = $this->session->userdata('id_klaster');
+		$id_user    = $this->session->userdata('id');
+		$pegawai    = $this->user_model->detail($id_user);
+		$id_klaster = $pegawai['id_klaster'];
 		$klast      = $this->Pjklaster_model->now($id_klaster);
-		$status      = 'belum';
+		$status     = 'belum';
 		// $taun       = $this->tahun_model->list_thn();
 
 		if(isset($_POST['tmt']))
@@ -89,7 +90,7 @@ class Pj_klaster extends CI_Controller
 			'klast'         =>  $klast,
 			'status'         => $status,
 			'id_klaster'    =>  $id_klaster,
-			'id_user_pj'    =>  $id_user_pj,
+			'id_user_pj'    =>  $id_user,
 			// 'taun'          =>  $taun,
 			'isi'           => 'admin/pj_klaster/list_approv');
 

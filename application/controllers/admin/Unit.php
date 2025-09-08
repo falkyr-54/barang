@@ -9,6 +9,7 @@ class Unit extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('unit_model');
+		$this->load->model('klaster_model');
 		$this->load->model('Brg_keluar_model');
 	}
 
@@ -17,11 +18,7 @@ class Unit extends CI_Controller
 	{
 
 		$unit = $this->unit_model->listing();
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
-
-		// Validasi
+		$klaster = $this->klaster_model->listing();
 		$valid = $this->form_validation;
 
 		$valid->set_rules(
@@ -35,16 +32,15 @@ class Unit extends CI_Controller
 			$data = array(
 				'title'			=> 'Data Master unit',
 				'unit'			=>	$unit,
-				'expired6bulan'	=> $expired6bln,
-				'expired3bulan'	=> $expired3bln,
-				'expired1bulan'	=> $expired1bln,
+				'klaster'		=>	$klaster,
 				'isi'			=> 'admin/unit/list'
 			);
 			$this->load->view('admin/layout/wrapper', $data);
 		} else {
 			$i 	= $this->input;
 			$data = array(
-				'unit'				=> $i->post('unit')
+				'unit'				=> $i->post('unit'),
+				'id_klaster'				=> $i->post('id_klaster')
 			);
 			$this->unit_model->tambah($data);
 			$this->session->set_flashdata('sukses', 'Data unit telah ditambah');
@@ -56,6 +52,7 @@ class Unit extends CI_Controller
 	public function edit($id_unit)
 	{
 		$unit = $this->unit_model->detail($id_unit);
+		$klaster = $this->klaster_model->listing();
 
 		$valid = $this->form_validation;
 		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
@@ -74,6 +71,7 @@ class Unit extends CI_Controller
 			$data = array(
 				'title'		=> 'Ubah Master Unit',
 				'unit'		=> $unit,
+				'klaster'		=> $klaster,
 				'expired6bulan'	=> $expired6bln,
 				'expired3bulan'	=> $expired3bln,
 				'expired1bulan'	=> $expired1bln,

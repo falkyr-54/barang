@@ -13,6 +13,19 @@ echo validation_errors('<div class="alert alert-warning">','</div>');
 				</div>
 			</div>
 		</div>
+
+		<div class="form-group">
+			<label>Pilih Klaster</label>
+			<select name="id_klaster" class="form-control" required>
+				<option value="">-- Pilih Klaster --</option>
+				<?php foreach($klaster as $k) { ?>
+					<option value="<?php echo $k->id_klaster ?>" 
+						<?php echo ($k->id_klaster == $unit->id_klaster) ? 'selected' : '' ?>>
+						<?php echo $k->nama ?>
+					</option>
+				<?php } ?>
+			</select>
+		</div>
 	</div>
 
 

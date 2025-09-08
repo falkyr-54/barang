@@ -62,7 +62,7 @@ if($this->session->flashdata('sukses')) {
               'acc_pj'   => ['fa-calendar-check-o', 'warning', 'acc PJ'],
               'acc_p'    => ['fa-calendar-check-o', 'info', 'acc pengurus barang'],
               'tolak_p'  => ['fa-calendar-check-o', 'info', 'di tolak pengurus barang'],
-              'belum'    => ['fa-calendar-check-o', 'danger', 'belum acc']
+              'belum'    => ['fa-calendar-check-o', 'danger', 'belum']
             ];
 
             if (isset($statusMap[$row['status_validasi']])) {

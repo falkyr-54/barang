@@ -10,7 +10,7 @@
     <?php } elseif ($klast['status_validasi'] == "tolak_p") { ?>
         <i class="fa fa-calendar-check-o btn btn-info btn-md"> di tolak pengurus barang</i>
     <?php } elseif ($klast['status_validasi'] == "selesai") { ?>
-        <i class="fa fa-calendar-check-o btn btn-info btn-md">Barang sudah diterima</i>
+        <i class="fa fa-calendar-check-o btn btn-success btn-md">Barang sudah diterima</i>
     <?php } ?>
 </button>
 
@@ -23,7 +23,6 @@ $jml_keluar       = $this->Brg_keluar_model->get_jumlah_keluar($id_barang);
 $hasil            = (int)$jml_masuk['total'] - (int)$jml_keluar['total'];
 
 ?>
-
 
 
 <?php if ($klast['status_validasi'] == "acc_pj") { ?>

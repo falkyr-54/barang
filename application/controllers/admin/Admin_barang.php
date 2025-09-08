@@ -49,6 +49,38 @@ class admin_barang extends CI_Controller
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
 
+	public function kasih($id_barang_keluar)
+	{
+		$tmt 		= date('Y-m-01');
+		$sampai 	= date('Y-m-31');
+		$bulan 		= date('m');
+		$tahun 		= date('Y');
+		$status 	= 'belum';
+		$id_user_admin = $this->session->userdata('id');
+		$klast      = $this->Admin_brg_model->now($bulan,$tahun);
+
+		// $taun       = $this->tahun_model->list_thn();
+
+
+		if (isset($_POST['tanggal_minta'])) 
+		{
+			$periode = ($this->input->post('tanggal_minta'));
+			redirect(base_url('admin/admin_barang/pencarian/'.$periode),'refresh');
+		}
+
+
+		$data = array(
+			'title'         => 'List barang yang harus di approve',
+			'tmt'           =>  $tmt,
+			'sampai'        =>  $sampai,
+			'klast'         =>  $klast,
+			'status'         =>  $status,
+			'id_user_admin' =>  $id_user_admin,
+			'isi'           => 'admin/admin_barang/list_kasih');
+
+		$this->load->view('admin/layout/wrapper', $data, FALSE);
+	}
+
 
 	
 
@@ -81,6 +113,28 @@ class admin_barang extends CI_Controller
 			$this->session->set_flashdata('sukses','berhasil diapprove');
 			redirect(base_url('admin/admin_barang/'));
 		}
+
+		
+	}
+
+
+	public function approve_kasih($id_barang_keluar) {
+
+		$id_pengurus = $this->session->userdata('id');
+		$libur     = $this->Admin_brg_model->detail($id_barang_keluar);
+		$tmt       = $this->uri->segment(5);
+		$sampai    = $this->uri->segment(6);
+
+		
+		$data = array(
+			'id_barang_keluar'  => $id_barang_keluar,
+			'tgl_edit'          => date('Y-m-d H:i:s'),
+			'status_validasi'   => 'selesai');
+
+	
+			$this->Brg_keluar_model->update($data);
+			$this->session->set_flashdata('sukses','barang sudah di berikan');
+			redirect(base_url('admin/admin_barang/'));
 
 		
 	}

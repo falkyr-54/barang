@@ -31,10 +31,12 @@
 
         <?php if($this->session->userdata('level') == "pj_klaster") { ?>
           <li><a href="<?php echo base_url('admin/pj_klaster/cari_approval') ?>"><i class="fa fa-cubes"></i>Data barang acc </a></li>
+           
         <?php } ?>
 
         <?php if($this->session->userdata('level') == "admin_barang") { ?>
           <li><a href="<?php echo base_url('admin/admin_barang') ?>"><i class="fa fa-cubes"></i>Validasi admin barang</a></li>
+          
         <?php } ?>
 
 

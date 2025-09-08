@@ -110,7 +110,7 @@ class Admin_brg_model extends CI_Model {
 	public function cari_klast($tmt, $sampai)
 	{	
 
-		$bagian = array('acc_pj','acc_p','tolak_p','acc_pj');
+		$bagian = array('acc_pj','acc_p','tolak_p','acc_pj','selesai');
 
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
 		$this->db->from('barang_keluar');
@@ -123,7 +123,6 @@ class Admin_brg_model extends CI_Model {
 		$this->db->where('barang_keluar.tanggal_minta >=',$tmt);
 		$this->db->where('barang_keluar.tanggal_minta <=',$sampai);
 		$this->db->where_in('barang_keluar.status_validasi',$bagian);
-
 		$this->db->order_by('tanggal_minta', 'asc');
 		$query = $this->db->get();
 		return $query->result_array();

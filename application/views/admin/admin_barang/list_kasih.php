@@ -113,10 +113,12 @@ if($this->session->flashdata('sukses')) {
 										<td><?php echo $klast['jumlah_keluar'] ?></td>
 										<td><?php echo $klast['tanggal_minta'] ?></td>
 										<td>
-											<?php if ($klast['status_validasi']=="tolak_p"||$klast['status_validasi']=="tolak_pj"){ ?>
+											<?php if ($klast['status_validasi']=="acc_p"||$klast['status_validasi']=="tolak_p"||$klast['status_validasi']=="tolak_pj"){ ?>
 												
 												<?php if($klast['status_validasi']=="tolak_pj"){ ?>
 													<i class="fa fa-calendar-times-o btn btn-danger btn-md" disabled> di tolak PJ</i>
+												<?php }elseif($klast['status_validasi']=="acc_p"){ ?>
+													<i class="fa fa-calendar-check-o btn btn-info btn-md" disabled> acc pengurus barang</i>
 												<?php }elseif($klast['status_validasi']=="tolak_p"){ ?>
 													<i class="fa fa-calendar-check-o btn btn-danger btn-md" disabled> di tolak pengurus barang</i>
 													<?php } ?></i>

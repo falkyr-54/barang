@@ -126,16 +126,6 @@ if (isset($error)) {
             <option value="hibah">hibah</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label>Status Pesanan</label>
-          <select name="status_pesanan" class="form-control select2" style="width: 100%;">
-            <option selected="selected">Pilih Status</option>
-            <option value="sudah">Sudah Datang</option>
-            <option value="belum">Belum Datang</option>
-          </select>
-        </div>
-
         <div class="form-group">
           <label>Jenis Pemesanan</label>
           <select name="jenis_pemesanan" class="form-control select2" style="width: 100%;">

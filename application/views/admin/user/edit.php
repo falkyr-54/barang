@@ -72,6 +72,8 @@ if(isset($error)) {
             <select class="form-control" name="akses_level">
               <option value="admin" <?php if ($user['akses_level']=="admin") { echo "Selected"; } ?>>admin</option>
               <option value="kelurahan" <?php if ($user['akses_level']=="kelurahan") { echo "Selected"; } ?>>kelurahan</option>
+              <option value="adminpptk" <?php if ($user['akses_level']=="adminpptk") { echo "Selected"; } ?>>Admin dan PPTK</option>
+              <option value="pj_klasterpptk" <?php if ($user['akses_level']=="pj_klasterpptk") { echo "Selected"; } ?>>PJ Klaster dan PPTK</option>
               <option value="admin_poli" <?php if ($user['akses_level']=="admin_poli") { echo "Selected"; } ?>>admin unit</option>
             </option>
           </select>

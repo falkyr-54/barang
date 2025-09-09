@@ -11,19 +11,38 @@ if (isset($error)) {
 
 <form name="form1" method="post" action="<?php echo base_url('admin/Brg_masuk/tambah/' . $barang['id_barang'] . '/' . $id_satker) ?>" enctype="multipart/form-data">
 
-
-  <!--  <form name="form1" method="post" action="<?php echo base_url('admin/Brg_masuk/tambah/' . $barang['id_barang']) ?>" enctype="multipart/form-data"> -->
-
   <div class="box box-warning">
     <div class="box-header with-border">
       <h3 class="box-title">Barang Masuk</h3>
-    </div><!-- /.box-header -->
+    </div>
 
     <div class="box-body">
-      <!-- text input -->
-      <div class="col-md-6">
-        <?php if ($this->session->userdata('level') == "admin") { ?>
 
+      <?php if ($this->session->userdata('level') == "pptk") { ?>
+        <!-- ============= TAMPIL UNTUK PPTK ============= -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Nama Barang</label>
+            <input type="text" name="nama_barang" class="form-control"
+              value="<?php echo $barang['nama_barang'] ?>" readonly>
+            <input type="hidden" name="id_barang" value="<?php echo  $barang['id_barang'] ?>">
+
+          </div>
+
+          <div class="form-group">
+            <label>Jumlah</label>
+            <input type="text" name="jumlah" class="form-control" placeholder="Qty">
+          </div>
+          <div class="form-group">
+            <label>Tanggal Permintaan</label>
+            <input type="date" name="tgl_permintaan" class="form-control" value="<?php echo date('Y-m-d'); ?>">
+          </div>
+
+        </div>
+
+      <?php } else { ?>
+        <!-- ============= TAMPIL UNTUK ADMIN ============= -->
+        <div class="col-md-6">
           <div class="form-group">
             <label>Rekanan</label>
             <select name="id_rekanan" class="form-control select2" style="width: 100%;">
@@ -33,148 +52,123 @@ if (isset($error)) {
             </select>
           </div>
 
+          <div class="form-group">
+            <label>Nama Barang</label>
+            <input type="text" name="nama_barang" class="form-control"
+              value="<?php echo $barang['nama_barang'] ?>" readonly>
+            <input type="hidden" name="id_barang" value="<?php echo  $barang['id_barang'] ?>">
+          </div>
 
+          <div class="form-group">
+            <label>Upload gambar</label>
+            <input type="file" name="gambar" class="form-control">
+          </div>
 
-        <?php } ?>
-        <!--  <div class="form-group" hidden="">
-            <label>id rekanan</label>
-            <input type="text" name="id_jenis" class="form-control" placeholder="Search ..." value=""  readonly>
-          </div> -->
-
-
-        <div class="form-group">
-          <label>Nama Barang</label>
-          <input type="text" name="nama_barang" class="form-control" placeholder="Search ..." value="<?php echo $barang['nama_barang'] ?>" required id="nama_barang" readonly>
-        </div>
-
-        <div class="form-group" hidden="">
-          <label>Nama Barang</label>
-          <input type="text" name="id_jenis" class="form-control" placeholder="Search ..." value="<?php echo $barang['id_jenis'] ?>" required id="id_jenis" readonly>
-        </div>
-
-        <div class="form-group">
-          <label>Upload gambar</label>
-          <input type="file" name="gambar" class="form-control">
-        </div>
-
-        <div class="form-group">
-          <input type="hidden" class="form-control" name="id_barang" value="<?php echo $barang['id_barang'] ?>" id="id_barang" readonly>
-        </div>
-
-        <div class="form-group">
-          <div class="row">
-
-            <div class="col-lg-6">
-
-              <label>Jumlah</label>
-              <input type="text" class="form-control" placeholder="Qty" id="jumlah" name="jumlah">
-            </div>
-
-            <div class="col-lg-6">
-              <label>Satuan</label>
-              <input type="text" class="form-control" id="satuan" name="satuan" value="<?php echo $barang['satuan'] ?>" readonly>
+          <div class="form-group">
+            <div class="row">
+              <div class="col-lg-6">
+                <label>Jumlah</label>
+                <input type="text" class="form-control" name="jumlah">
+              </div>
+              <div class="col-lg-6">
+                <label>Satuan</label>
+                <input type="text" class="form-control"
+                  value="<?php echo $barang['satuan'] ?>" readonly>
+              </div>
             </div>
           </div>
 
-        </div>
-
-        <div class="form-group">
-          <label>Harga Satuan</label>
-          <input type="text" name="harga" id="harga" class="form-control" placeholder="Rp...">
-        </div>
-
-        <div class="form-group">
-          <label class="control-label">Nilai Pesanan</label>
-          <input type="text" readonly name="nilai_pesanan" id="nilai_pesanan" class="form-control" placeholder="Nilai Pesanan">
-        </div>
-
-        <div class="form-group">
-          <label>TKDN</label>
-          <input type="text" name="tkdn" class="form-control" placeholder="TKDN">
-        </div>
-
-              <div class="form-group">
-          <label>ID Paket Ekatalog</label>
-          <input type="text" name="id_paket_ekatalog" class="form-control" placeholder="ID Paket Ekatalog ...">
-        </div>
-        <div class="form-group">
-          <label class="control-label">ED Barang</label>
-          <input type="date" name="ed_barang" value="" class="form-control" placeholder="ED Barang ...">
-        </div>
-        <div class="form-group">
-          <label class="control-label">No BAST</label>
-          <input type="text" name="no_bast" value="" class="form-control" placeholder="No BAST ...">
-        </div>
-        <!-- textarea -->
-
-
-      </div>
-
-
-      <div class="col-md-6">
-        <div class="form-group">
-          <label class="control-label" for="inputSuccess">Tahun Pengadaan</label>
-          <input type="number" name="tahun_pengadaan" class="form-control" id="inputSuccess" placeholder="Tahun ...">
-        </div>
-
-        <div class="form-group">
-          <label>Sumber pengadaan</label>
-          <select name="sumber" class="form-control select2" style="width: 100%;">
-            <option selected="selected">Pilih Rekanan</option>
-            <option value="apbd">APBD</option>
-            <option value="blud">blud</option>
-            <option value="hibah">hibah</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Jenis Pemesanan</label>
-          <select name="jenis_pemesanan" class="form-control select2" style="width: 100%;">
-            <option selected="selected">Pilih Jenis</option>
-            <option value="pdn">PDN</option>
-            <option value="impor">IMPOR</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Metode Pengadaan</label>
-          <select name="metode_pengadaan" class="form-control select2" style="width: 100%;">
-            <option selected="selected">Pilih Metode</option>
-            <option value="epurchasing">Epurchasing</option>
-            <option value="pl">PL</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label">Tanggal Datang</label>
-          <input type="date" name="tgl_datang" value="<?php echo set_value('tgl_datang') ?>" class="form-control" placeholder="tgl datang ...">
-        </div>
-
-        <div class="form-group">
-          <label class="control-label">Tanggal SIP</label>
-          <input type="date" name="tgl_sip" value="" class="form-control" placeholder="tgl SIP ...">
-        </div>
-
-     
           <div class="form-group">
-          <label>NO SP</label>
-          <input type="text" name="no_sp" class="form-control" placeholder="NO SP ...">
+            <label>Harga Satuan</label>
+            <input type="text" name="harga" class="form-control" placeholder="Rp...">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Nilai Pesanan</label>
+            <input type="text" readonly name="nilai_pesanan" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>TKDN</label>
+            <input type="text" name="tkdn" class="form-control" placeholder="TKDN">
+          </div>
+
+          <div class="form-group">
+            <label>ID Paket Ekatalog</label>
+            <input type="text" name="id_paket_ekatalog" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">ED Barang</label>
+            <input type="date" name="ed_barang" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">No BAST</label>
+            <input type="text" name="no_bast" class="form-control">
+          </div>
         </div>
 
+        <div class="col-md-6">
+          <div class="form-group">
+            <label class="control-label">Tahun Pengadaan</label>
+            <input type="number" name="tahun_pengadaan" class="form-control" placeholder="Tahun ...">
+          </div>
 
-        <div class="form-group">
-          <label class="control-label">No Batch / Lot Barang</label>
-          <input type="text" name="no_batch" value="" class="form-control" placeholder="No Batch / Lot Barang">
+          <div class="form-group">
+            <label>Sumber pengadaan</label>
+            <select name="sumber" class="form-control select2" style="width: 100%;">
+              <option value="">Pilih Rekanan</option>
+              <option value="apbd">APBD</option>
+              <option value="blud">BLUD</option>
+              <option value="hibah">Hibah</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Jenis Pemesanan</label>
+            <select name="jenis_pemesanan" class="form-control select2" style="width: 100%;">
+              <option value="">Pilih Jenis</option>
+              <option value="pdn">PDN</option>
+              <option value="impor">IMPOR</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Metode Pengadaan</label>
+            <select name="metode_pengadaan" class="form-control select2" style="width: 100%;">
+              <option value="">Pilih Metode</option>
+              <option value="epurchasing">Epurchasing</option>
+              <option value="pl">PL</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Tanggal Datang</label>
+            <input type="date" name="tgl_datang" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Tanggal SIP</label>
+            <input type="date" name="tgl_sip" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label>NO SP</label>
+            <input type="text" name="no_sp" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">No Batch / Lot Barang</label>
+            <input type="text" name="no_batch" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label class="control-label">Spesifikasi</label>
+            <textarea class="form-control" name="spesifikasi"></textarea>
+          </div>
         </div>
-
-
-
-        <div class="form-group">
-          <label class="control-label"> Spesifikasi</label>
-          <textarea class="form-control" name="spesifikasi" placeholder=" spek barang..."></textarea>
-        </div>
-
-
-      </div>
+      <?php } ?>
 
       <div class="col-md-12">
         <div class="form-group">
@@ -187,8 +181,22 @@ if (isset($error)) {
   </div>
 </form>
 
+
 <script>
   $(document).ready(function() {
+
+    function hitungNilaiPesanan() {
+      var jumlah = parseFloat($("input[name='jumlah']").val()) || 0;
+      var harga = parseFloat($("input[name='harga']").val()) || 0;
+      var total = jumlah * harga;
+
+      $("input[name='nilai_pesanan']").val(total);
+    }
+
+    // Jalankan saat user mengetik jumlah atau harga
+    $("input[name='jumlah'], input[name='harga']").on("input", function() {
+      hitungNilaiPesanan();
+    });
     //get name jumlah
     $('#harga, #jumlah').on('keyup change', function() {
       let jumlah = parseFloat($('#jumlah').val()) || 0;

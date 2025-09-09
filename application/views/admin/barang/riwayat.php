@@ -37,7 +37,7 @@ if ($this->session->flashdata('sukses')) {
     <table id="example1" class="table table-bordered table-striped">
       <thead>
 
-      <?php if ($this->session->userdata('level') == "admin") { ?>
+      <?php if ($this->session->userdata('level') == "admin" || $this->session->userdata('level') == "pptk") { ?>
         <a href="<?php echo base_url('admin/brg_masuk/tambah/' . $barang['id_barang']) ?>" class="btn bg-maroon margin">
           <i class="fa fa-plus"></i> Tambah</a> 
       <?php } ?>

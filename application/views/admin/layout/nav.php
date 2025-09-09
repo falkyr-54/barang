@@ -24,34 +24,31 @@
 
 
          <?php if($this->session->userdata('level') == "admin_poli"||$this->session->userdata('level') == "kelurahan") { ?>
+
           <li><a href="<?php echo base_url('admin/barang_unit') ?>"><i class="fa fa-cubes"></i>Data barang yang diajukan </a></li>
         <?php } ?>
 
         <li><a href="<?php echo base_url('admin/barang/proses') ?>"><i class="fa fa-cubes"></i>Proses Transaksi </a></li>
 
-        <?php if($this->session->userdata('level') == "pj_klaster") { ?>
+        
+        <?php if($this->session->userdata('level') == "pj_klaster"||$this->session->userdata('level') == "kapustu") { ?>
           <li><a href="<?php echo base_url('admin/pj_klaster/cari_approval') ?>"><i class="fa fa-cubes"></i>Data barang acc </a></li>
            
         <?php } ?>
 
+
         <?php if($this->session->userdata('level') == "admin_barang") { ?>
           <li><a href="<?php echo base_url('admin/admin_barang') ?>"><i class="fa fa-cubes"></i>Validasi admin barang</a></li>
-          
         <?php } ?>
 
 
         <?php if($this->session->userdata('level') == "admin") { ?>
-
           <li><a href="<?php echo base_url('admin/barang/cari_masuk') ?>"><i class="fa fa-mail-forward"></i>Data Transaksi Masuk </a></li>
           <li><a href="<?php echo base_url('admin/barang/cari_keluar') ?>"><i class="fa fa-mail-reply"></i>Data Transaksi Keluar </a></li>
         <?php } ?>
 <!--  -->
 
-        <?php if($this->session->userdata('level') == "kapustu") { ?>
-
-          <li><a href="<?php echo base_url('admin/barang/validasi') ?>"><i class="fa fa-cubes"></i>validasi kapustu/pj klaster</a></li>
-
-        <?php } ?> 
+      
       </ul>
     </li>
 

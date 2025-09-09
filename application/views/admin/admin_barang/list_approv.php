@@ -11,7 +11,7 @@ $id_satker   = $user_detail['id_satker'];
 <section class="content-header">
 	<h1>
 		<div class="alert alert-success">
-			<p>Hai <strong><?php echo $user_aktif['nama_user'] . ' (' . $user_aktif['username'] . ')'; ?></strong>. Selamat datang di <strong><?php echo $site['namaweb'] . ' - ' . $site['tagline'] ?></strong></p>
+			<p>Hai <strong><?php echo $user_aktif['nama_user'] . ' (' . $user_aktif['username'] . ')'; ?></strong>. Selamat datang di website <strong><?php echo $site['namaweb'] . ' - ' . $site['tagline'] ?></strong></p>
 		</div>
 	</h1>
 </section>
@@ -46,14 +46,14 @@ if($this->session->flashdata('sukses')) {
 				<div class="form-group">
 					<label for="inputEmail3" class="col-sm-2 control-label">Tanggal Awal</label>
 					<div class="col-sm-4">
-						<input type="text" class="form-control tanggal_max" placeholder="YYYY-MM-DD" name="tmt" autocomplete="off">
+						<input type="text" class="form-control tanggal_max" placeholder="YYYY-MM-DD" name="tmt" autocomplete="off" required>
 					</div>
 				</div>
 				
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">Sampai Tanggal</label>
 					<div class="col-sm-4">
-						<input type="text" class="form-control tanggal_max" placeholder="YYYY-MM-DD" name="sampai" autocomplete="off">
+						<input type="text" class="form-control tanggal_max" placeholder="YYYY-MM-DD" name="sampai" autocomplete="off" required>
 					</div>
 				</div>
 
@@ -62,11 +62,12 @@ if($this->session->flashdata('sukses')) {
 					<div class="col-sm-4">
 						<select name="status_validasi" class="form-control">
 							<option value="">-Pilih Status-</option>
-							<option value="0">Semua</option>
+							<!-- <option value="0">Semua</option> -->
 							<option value="acc_pj">Sudah divalidasi PJ</option>
 							<option value="tolak_pj">Di tolak PJ</option>
 							<option value="acc_p">Sudah validasi Pengurus barang</option>
 							<option value="tolak_p">Di tolak Pengurus barang</option>
+							<option value="selesai">Selesai/sudah diberikan</option>
 						</select>
 					</div>
 				</div>

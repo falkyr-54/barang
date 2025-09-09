@@ -15,7 +15,7 @@ if($this->session->flashdata('sukses')) {
     <tr>
       <th>Nomor</th>
       <th>Kode Barang</th>
-      <th>Jenis Barang</th>
+      <th>Nama Barang</th>
       <th>Action</th>
     </tr>
   </thead>

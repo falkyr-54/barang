@@ -14,11 +14,11 @@ class Pj_klaster extends CI_Controller
 		$this->load->model('Tahun_model');
 	}
 
-// test controller pj lagi aja
+	// test controller pj lagi aja
 	public function index()
 	{
 		$id_klaster     = $this->session->userdata('id_klaster');
-		
+
 		$id_user_pj        = $this->session->userdata('id');
 		$site 	= $this->konfigurasi_model->listing();
 		$tahun 	= date('Y');
@@ -26,11 +26,15 @@ class Pj_klaster extends CI_Controller
 		$listing = $this->Pjklaster_model->list_barang($id_klaster);
 
 		$valid = $this->form_validation;
-		
-		$valid->set_rules('jumlah_keluar','Jumlah keluar','required',
-			array('required'    => 'Jumlah keluar harus diisi'));
-		
-		if($valid->run() === FALSE) {
+
+		$valid->set_rules(
+			'jumlah_keluar',
+			'Jumlah keluar',
+			'required',
+			array('required'    => 'Jumlah keluar harus diisi')
+		);
+
+		if ($valid->run() === FALSE) {
 
 			$data = array(
 				'title'		        => $site['namaweb'] . ' - ' . $site['tagline'],
@@ -38,13 +42,12 @@ class Pj_klaster extends CI_Controller
 				'brg'		        => $brg,
 				'listing' 	        => $listing,
 				'id_user_pj' 		=> $id_user_pj,
-				'isi'		        => 'admin/pj_klaster/list');
+				'isi'		        => 'admin/pj_klaster/list'
+			);
 			$this->load->view('admin/layout/wrapper', $data);
-
-
-		}else{
+		} else {
 			$i 	= $this->input;
-			$data = array(	
+			$data = array(
 				'id_barang_keluar'		=> $i->post('id_barang_keluar'),
 				'jumlah_keluar'			=> $i->post('jumlah_keluar'),
 				'id_user_pj'			=> $id_user_pj,
@@ -53,10 +56,9 @@ class Pj_klaster extends CI_Controller
 
 
 			$this->Brg_keluar_model->update($data);
-			$this->session->set_flashdata('sukses','Data divalidasi');
+			$this->session->set_flashdata('sukses', 'Data divalidasi');
 			redirect(base_url('admin/pj_klaster'));
 		}
-
 	}
 
 
@@ -76,10 +78,9 @@ class Pj_klaster extends CI_Controller
 		$status     = 'belum';
 		// $taun       = $this->tahun_model->list_thn();
 
-		if(isset($_POST['tmt']))
-		{
-			$periode = ($this->input->post('tmt').'/'.$this->input->post('sampai').'/'.$id_klaster.'/'.$this->input->post('status'));
-			redirect(base_url('admin/pj_klaster/pencarian/'.$periode),'refresh');
+		if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai') . '/' . $id_klaster . '/' . $this->input->post('status'));
+			redirect(base_url('admin/pj_klaster/pencarian/' . $periode), 'refresh');
 		}
 
 
@@ -92,7 +93,8 @@ class Pj_klaster extends CI_Controller
 			'id_klaster'    =>  $id_klaster,
 			'id_user_pj'    =>  $id_user,
 			// 'taun'          =>  $taun,
-			'isi'           => 'admin/pj_klaster/list_approv');
+			'isi'           => 'admin/pj_klaster/list_approv'
+		);
 
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
@@ -117,7 +119,8 @@ class Pj_klaster extends CI_Controller
 	// 	redirect(base_url('admin/pj_klaster/cari_approval/'));
 	// }
 
-	public function approve($id_barang_keluar) {
+	public function approve($id_barang_keluar)
+	{
 		$jumlah_keluar = $this->input->post('jumlah_keluar');
 		$tmt           = $this->input->post('tmt');
 		$sampai        = $this->input->post('sampai');
@@ -137,7 +140,8 @@ class Pj_klaster extends CI_Controller
 	}
 
 
-	public function tolak($id_barang_keluar) {
+	public function tolak($id_barang_keluar)
+	{
 
 		$jumlah_keluar = $this->input->post('jumlah_keluar');
 		$tmt           = $this->input->post('tmt');
@@ -163,14 +167,13 @@ class Pj_klaster extends CI_Controller
 		$sampai      = $this->uri->segment(5);
 		$status      = $this->uri->segment(6);
 		$id_klaster  = $this->session->userdata('id_klaster');
-		$klast       = $this->Pjklaster_model->pencarian_klast($tmt,$sampai,$status,$id_klaster);
+		$klast       = $this->Pjklaster_model->pencarian_klast($tmt, $sampai, $status, $id_klaster);
 
-		if(isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0')
-		{
-			$periode = ($this->input->post('tmt').'/'.$this->input->post('sampai').'/'.$this->input->post('status_validasi').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/pencarian_klast/'.$periode),'refresh');
-		}else if(isset($_POST['tmt'])) {
-			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai').'/'.$id_klaster);
+		if (isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0') {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai') . '/' . $this->input->post('status_validasi') . '/' . $id_klaster);
+			redirect(base_url('admin/pj_klaster/pencarian_klast/' . $periode), 'refresh');
+		} else if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai') . '/' . $id_klaster);
 			redirect(base_url('admin/pj_klaster/cari_klaster/' . $periode), 'refresh');
 		}
 
@@ -183,7 +186,8 @@ class Pj_klaster extends CI_Controller
 			'status'     => $status,
 			'id_klaster' => $id_klaster,
 			'klast'     => $klast,
-			'isi'       => 'admin/pj_klaster/list_approv');
+			'isi'       => 'admin/pj_klaster/list_approv'
+		);
 
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
@@ -194,31 +198,46 @@ class Pj_klaster extends CI_Controller
 		$sampai      = $this->uri->segment(5);
 		$status      = $this->uri->segment(6);
 		$id_klaster  = $this->session->userdata('id_klaster');
-		$klast       = $this->Pjklaster_model->cari_klaster($tmt,$sampai,$id_klaster);
+		$klast       = $this->Pjklaster_model->cari_klaster($tmt, $sampai, $id_klaster);
 
-		
-		if(isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0')
-		{
-			$periode = ($this->input->post('tmt').'/'.$this->input->post('sampai').'/'.$this->input->post('status_validasi').'/'.$id_klaster);
-			redirect(base_url('admin/pj_klaster/pencarian_klast/'.$periode),'refresh');
-		}else if(isset($_POST['tmt'])) {
-			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai').'/'.$id_klaster);
+
+		if (isset($_POST['tmt'], $_POST['status_validasi']) && $_POST['status_validasi'] !== '0') {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai') . '/' . $this->input->post('status_validasi') . '/' . $id_klaster);
+			redirect(base_url('admin/pj_klaster/pencarian_klast/' . $periode), 'refresh');
+		} else if (isset($_POST['tmt'])) {
+			$periode = ($this->input->post('tmt') . '/' . $this->input->post('sampai') . '/' . $id_klaster);
 			redirect(base_url('admin/pj_klaster/cari_klaster/' . $periode), 'refresh');
 		}
 
 
 		$data = array(
-			'title'     => 'Hasil pencarian ',
+			'title'     => 'Hasil pencarian data ',
 			'tmt'       => $tmt,
-			'sampai'       => $sampai,
-			'status'     => $status,
+			'sampai'    => $sampai,
+			'status'    => $status,
 			'id_klaster' => $id_klaster,
 			'klast'     => $klast,
-			'isi'       => 'admin/pj_klaster/list_approv');
+			'isi'       => 'admin/pj_klaster/list_approv'
+		);
 
 		$this->load->view('admin/layout/wrapper', $data, FALSE);
 	}
 
+	public function auto_reject()
+	{
+		// load model
+		$this->load->model('Pjklaster_model');
 
+		// jam sekarang
+		$jam = date('H:i:s');
 
+		// kalau sudah lewat jam 14:00
+		if (strtotime($jam) >= strtotime("14:00:00")) {
+			// update status otomatis
+			$this->Pjklaster_model->auto_reject();
+			echo "Update selesai: permintaan lewat jam 14 otomatis ditolak sistem.";
+		} else {
+			echo "Belum lewat jam 14:00, tidak ada perubahan.";
+		}
+	}
 }

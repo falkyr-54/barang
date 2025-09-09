@@ -47,22 +47,25 @@ class Admin_brg_model extends CI_Model {
 
 
 	public function now() {
+    // $bagian = array('acc_pj');
+    $today  = date('Y-m-d'); // ambil tanggal hari ini
 
-		$bagian = array('acc_pj','acc_p','tolak_p','tolak_p','selesai');
+    $this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker, ms_satuan.satuan');
+    $this->db->from('barang_keluar');
+    $this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
+    $this->db->join('ms_satuan', 'ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
+    $this->db->join('pegawai', 'pegawai.id_pegawai = barang_keluar.id_pegawai', 'left');
+    $this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
+    $this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
+    $this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
+    // $this->db->where_in('status_validasi', $bagian);
+    $this->db->where('DATE(tanggal_minta)', $today); // hanya hari ini
+    $this->db->order_by('tanggal_minta', 'asc');
 
-		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
-		$this->db->from('barang_keluar');
-		$this->db->join('ms_barang', 'ms_barang.id_barang = barang_keluar.id_barang', 'left');
-		$this->db->join('ms_satuan', 'ms_satuan.id_satuan = ms_barang.id_satuan', 'left');
-		$this->db->join('pegawai', 'pegawai.id_pegawai = barang_keluar.id_pegawai', 'left');
-		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
-		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
-		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
-		$this->db->where_in('status_validasi',$bagian);
-		$this->db->order_by('tanggal_minta', 'asc');
-		$query = $this->db->get();
-		return $query->result_array();
-	}
+    $query = $this->db->get();
+    return $query->result_array();
+}
+
 
 
 

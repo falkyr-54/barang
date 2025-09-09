@@ -22,18 +22,13 @@ class Barang extends CI_Controller
 	// Pengguna
 	public function index()
 	{
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan();
+		
 		$barang = $this->Barang_model->listing();
 		$id_satkerku = $this->uri->segment(4); {
 			$data = array(
 				'title'			=> 'Data Master Jenis Barang',
 				'barang'		=>	$barang,
 				'id_satkerku'	=>	$id_satkerku,
-				'expired6bulan' => $expired6bln,
-				'expired3bulan' => $expired3bln,
-				'expired1bulan' => $expired1bln,
 				'isi'			=> 'admin/barang/list_brg'
 			);
 			$this->load->view('admin/layout/wrapper', $data);
@@ -44,16 +39,12 @@ class Barang extends CI_Controller
 	{
 		$barang = $this->Barang_model->listing();
 		$id_satkerku = $this->uri->segment(4);
-		$expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-		$expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-		$expired1bln = $this->Brg_keluar_model->list_expired1bulan(); {
+		
+		{
 			$data = array(
-				'title'			=> 'Data Barang',
+				'title'			=> 'Data Barang Puskesmas',
 				'barang'		=>	$barang,
 				'id_satkerku'	=>	$id_satkerku,
-				'expired6bulan' => $expired6bln,
-				'expired3bulan' => $expired3bln,
-				'expired1bulan' => $expired1bln,
 				'isi'			=> 'admin/barang/proses'
 			);
 			$this->load->view('admin/layout/wrapper', $data);

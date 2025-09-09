@@ -1,11 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Pjklaster_model extends CI_Model {
+class Pjklaster_model extends CI_Model
+{
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->load->database();
-	}	
+	}
 
 	public function list_barang($id_klaster)
 	{
@@ -25,7 +27,8 @@ class Pjklaster_model extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function terbaru($bulan,$tahun,$id_klaster) {
+	public function terbaru($bulan, $tahun, $id_klaster)
+	{
 
 
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
@@ -36,7 +39,8 @@ class Pjklaster_model extends CI_Model {
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
 		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
 		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
-		$this->db->where(array('month(tanggal_minta)' => $bulan,
+		$this->db->where(array(
+			'month(tanggal_minta)' => $bulan,
 			'year(tanggal_minta)' => $tahun,
 			'unit_bagian.id_klaster' => $id_klaster
 		));
@@ -45,9 +49,10 @@ class Pjklaster_model extends CI_Model {
 		return $query->result_array();
 	}
 
-	public function now($id_klaster) {
+	public function now($id_klaster)
+	{
 
-		$list = ['acc_pj','belum','tolak_pj'];
+		$list = ['acc_pj', 'belum', 'tolak_pj'];
 
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
 		$this->db->from('barang_keluar');
@@ -57,14 +62,14 @@ class Pjklaster_model extends CI_Model {
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
 		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
 		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
-		$this->db->where('unit_bagian.id_klaster',$id_klaster);
-		$this->db->where_in('status_validasi',$list);
+		$this->db->where('unit_bagian.id_klaster', $id_klaster);
+		$this->db->where_in('status_validasi', $list);
 		$this->db->order_by('tanggal_minta', 'asc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
 
-	public function detail($id_klaster,$id_barang_keluar)
+	public function detail($id_klaster, $id_barang_keluar)
 	{
 		$this->db->select('barang_keluar.*, ms_barang.nama_barang, pegawai.nama_lengkap, unit_bagian.unit, satker.nama_satker,ms_satuan.satuan');
 		$this->db->from('barang_keluar');
@@ -83,7 +88,7 @@ class Pjklaster_model extends CI_Model {
 
 
 	public function pencarian_klast($tmt, $sampai, $status)
-	{	
+	{
 
 		$id_klaster = $this->session->userdata('id_klaster');
 
@@ -106,7 +111,7 @@ class Pjklaster_model extends CI_Model {
 	}
 
 	public function cari_klaster($tmt, $sampai, $id_klaster)
-	{	
+	{
 
 		// $bagian = array('acc_pj','acc_p','tolak_p','acc_pj');
 
@@ -118,14 +123,32 @@ class Pjklaster_model extends CI_Model {
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
 		$this->db->join('satker', 'satker.id_satker = barang_keluar.id_satker', 'left');
 		$this->db->join('klaster', 'klaster.id_klaster = unit_bagian.id_klaster', 'left');
-		$this->db->where('barang_keluar.tanggal_minta >=',$tmt);
-		$this->db->where('barang_keluar.tanggal_minta <=',$sampai);
-		$this->db->where('unit_bagian.id_klaster',$id_klaster);
+		$this->db->where('barang_keluar.tanggal_minta >=', $tmt);
+		$this->db->where('barang_keluar.tanggal_minta <=', $sampai);
+		$this->db->where('unit_bagian.id_klaster', $id_klaster);
 		// $this->db->where_in('barang_keluar.status_validasi',$bagian);
 
 		$this->db->order_by('tanggal_minta', 'asc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}
+
+public function auto_reject()
+{
+    // Ambil data yang masih "belum"
+    $this->db->where('status_validasi', 'belum');
+    $this->db->where('tanggal_minta', date('Y-m-d'));
+    $rows = $this->db->get('barang_keluar')->result();
+
+    foreach ($rows as $row) {
+        // Simpan jumlah_keluar lama di kolom keterangan
+        $this->db->where('id_barang_keluar', $row->id); // pastikan ada primary key id
+        $this->db->update('barang_keluar', [
+            'status_validasi' => 'ditolak_sistem',
+            'keterangan'      => $row->keterangan . " | Jumlah ditolak: " . $row->jumlah_keluar,
+            'jumlah_keluar'   => 0
+        ]);
+    }
+}
 
 }

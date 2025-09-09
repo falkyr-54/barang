@@ -18,14 +18,14 @@ class Barang_unit extends CI_Controller
   {
 
     $id_user = $this->session->userdata('id');
-    // $id_unit    = $this->session->userdata('id_unit');
+    $id_unit       = $this->session->userdata('id_unit');
+    $pegawai       = $this->user_model->detail($id_user);
     // $detail_p   = $this->pegawai_barang_model->detail($id_pegawai);
-    $pegawai    = $this->user_model->detail($id_user);
-    $id_unit    = $pegawai['id_unit'];
-    $keluar     = $this->barang_unit_model->list_brgku($id_unit);
+    // $id_unit    = $pegawai['id_unit'];
+    $keluar        = $this->barang_unit_model->list_brgku($id_unit);
 
     $data = array(
-      'title'    => 'Data Barang Keluar'.''.$id_unit,
+      'title'    => 'Data Barang Permintaan Unit',
       'keluar'   => $keluar,
       'isi'      => 'admin/barang_unit/list'
     );

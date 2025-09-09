@@ -10,11 +10,11 @@ $id_satker   = $user_detail['id_satker'];
 ?>
 
 <?php
-          // Pesan notifikasi
-echo validation_errors('<div class="alert alert-success">','</div>');
+// Pesan notifikasi
+echo validation_errors('<div class="alert alert-success">', '</div>');
 
-          // Pesan sukses
-if($this->session->flashdata('sukses')) {
+// Pesan sukses
+if ($this->session->flashdata('sukses')) {
 	echo '<div class="alert alert-success">';
 	echo $this->session->flashdata('sukses');
 	echo '</div>';
@@ -34,12 +34,12 @@ if($this->session->flashdata('sukses')) {
 
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<h3 class="panel-title" >Cari List diapprove : </h3>
+		<h3 class="panel-title">Cari List diapprove : </h3>
 	</div>
 	<div class="panel-body">
 
 
-		<form class="form-horizontal" name="form1" method="post" action="<?php echo base_url('admin/pj_klaster/pencarian_klast/'.$tmt.'/'.$sampai.'/'.$status.'/'.$id_klaster) ?>" enctype="multipart/form-data">
+		<form class="form-horizontal" name="form1" method="post" action="<?php echo base_url('admin/pj_klaster/pencarian_klast/' . $tmt . '/' . $sampai . '/' . $status . '/' . $id_klaster) ?>" enctype="multipart/form-data">
 
 			<div class="box-body">
 				<div class="form-group">
@@ -48,7 +48,7 @@ if($this->session->flashdata('sukses')) {
 						<input type="text" class="form-control tanggal_max" placeholder="YYYY-MM-DD" name="tmt" autocomplete="off">
 					</div>
 				</div>
-				
+
 				<div class="form-group">
 					<label for="inputPassword3" class="col-sm-2 control-label">Sampai Tanggal</label>
 					<div class="col-sm-4">
@@ -64,7 +64,8 @@ if($this->session->flashdata('sukses')) {
 							<option value="0">Semua</option>
 							<option value="belum">Belum validasi</option>
 							<option value="acc_pj">Sudah divalidasi</option>
-							<option value="tolak_pj">Di tolak</option>
+							<option value="tolak_pj">Di tolak PJ/kapustu</option>
+							<option value="ditolak_sistem">Ditolak sistem(lewat jam 14)</option>
 						</select>
 					</div>
 				</div>
@@ -101,7 +102,8 @@ if($this->session->flashdata('sukses')) {
 								</tr>
 							</thead>
 							<tbody>
-								<?php $i=1;foreach ($klast as $klast) { ?>
+								<?php $i = 1;
+								foreach ($klast as $klast) { ?>
 									<tr>
 
 										<td><?php echo $i ?></td>
@@ -111,43 +113,43 @@ if($this->session->flashdata('sukses')) {
 										<td><?php echo $klast['jumlah_keluar'] ?></td>
 										<td><?php echo $klast['tanggal_minta'] ?></td>
 										<td>
-											<?php if ($klast['status_validasi']=="acc_p"||$klast['status_validasi']=="tolak_p"||$klast['status_validasi']=="tolak_pj"||$klast['status_validasi']=="acc_pj"){ ?>
-												
-												<?php if($klast['status_validasi']=="tolak_pj"){ ?>
+											<?php if ($klast['status_validasi'] == "acc_p" || $klast['status_validasi'] == "tolak_p" 
+											|| $klast['status_validasi'] == "tolak_pj" || $klast['status_validasi'] == "acc_pj"|| $klast['status_validasi'] == "ditolak_sistem") { ?>
+
+												<?php if ($klast['status_validasi'] == "tolak_pj") { ?>
 													<i class="fa fa-calendar-times-o btn btn-danger btn-md" disabled> di tolak PJ</i>
-												<?php }elseif($klast['status_validasi']=="acc_pj"){ ?>
+												<?php } elseif ($klast['status_validasi'] == "acc_pj") { ?>
 													<i class="fa fa-calendar-check-o btn btn-success btn-md" disabled> acc PJ</i>
-												<?php }elseif($klast['status_validasi']=="acc_p"){ ?>
+												<?php } elseif ($klast['status_validasi'] == "acc_p") { ?>
 													<i class="fa fa-calendar-check-o btn btn-info btn-md" disabled> acc pengurus barang</i>
-												<?php }elseif($klast['status_validasi']=="tolak_p"){ ?>
+												<?php } elseif ($klast['status_validasi'] == "tolak_p") { ?>
 													<i class="fa fa-calendar-check-o btn btn-info btn-md" disabled> di tolak pengurus barang</i>
-													<?php } ?>
-
-												<?php }else{ ?>
-													<?php
-													include('appr.php');
-													?>
+												<?php } elseif ($klast['status_validasi'] == "ditolak_sistem") { ?>
+													<i class="fa fa-calendar-check-o btn btn-danger btn-md" disabled> di tolak sistem</i>
 												<?php } ?>
-											</td>
-										</tr>
-										<?php $i++ ?>
-									<?php } ?>
-								</tbody>
-							</table>
+
+											<?php } else { ?>
+												<?php
+												include('appr.php');
+												?>
+											<?php } ?>
+										</td>
+									</tr>
+									<?php $i++ ?>
+								<?php } ?>
+							</tbody>
+						</table>
 
 
-							<script>
-								$(function() {
+						<script>
+							$(function() {
 
-									$( ".tanggal_max" ).datepicker({
-      // inline: true,
-      changeYear: true,
-      changeMonth: true,
-      yearRange: "2023:<?php echo date('Y') ?>",
-      dateFormat: "yy-mm-dd",
-  });
+								$(".tanggal_max").datepicker({
+									// inline: true,
+									changeYear: true,
+									changeMonth: true,
+									yearRange: "2023:<?php echo date('Y') ?>",
+									dateFormat: "yy-mm-dd",
 								});
-							</script>
-
-
-
+							});
+						</script>

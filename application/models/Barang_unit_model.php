@@ -31,7 +31,7 @@ class Barang_unit_model extends CI_Model
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = barang_keluar.id_unit', 'left');
 		$this->db->where('barang_keluar.id_unit', $id_unit);
 		// $this->db->where('barang_keluar.id_satker', $id_satker);
-		$this->db->order_by('id_barang_keluar', 'desc');
+		$this->db->order_by('tanggal_minta', 'desc');
 		$query = $this->db->get();
 		return $query->result_array();
 	}

@@ -10,9 +10,10 @@ class User_model extends CI_Model {
 	
 	// Listing
 	public function listing() {
-		$this->db->select('user.*,unit_bagian.unit');
+		$this->db->select('user.*,unit_bagian.unit,klaster.nama');
 		$this->db->from('user');
 		$this->db->join('unit_bagian', 'unit_bagian.id_unit = user.id_unit', 'left');
+		$this->db->join('klaster', 'klaster.id_klaster = user.id_klaster', 'left');
 		$this->db->order_by('id_user','ASC');
 		$query = $this->db->get();
 		return $query->result_array();

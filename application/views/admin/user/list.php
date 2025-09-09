@@ -19,6 +19,7 @@ if($this->session->flashdata('sukses')) {
       <th>Nomor</th>
       <th>Nama User</th>
       <th>Username</th>
+      <th>Klaster</th>
       <th>Ruangan</th>
       <th>Akses</th>
       <th>Action</th>
@@ -30,6 +31,7 @@ if($this->session->flashdata('sukses')) {
       <td><?php echo $i ?></td>
       <td><?php echo $user['nama_user'] ?></td>
       <td><?php echo $user['username'] ?></td>
+      <td><?php echo $user['nama'] ?></td>
       <td><?php echo $user['unit'] ?></td>
       <td><?php echo $user['akses_level'] ?></td>
       <td>  

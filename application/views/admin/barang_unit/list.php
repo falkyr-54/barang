@@ -61,7 +61,8 @@ if($this->session->flashdata('sukses')) {
               'tolak_pj' => ['fa-calendar-times-o', 'danger', 'di tolak PJ'],
               'acc_pj'   => ['fa-calendar-check-o', 'warning', 'acc PJ'],
               'acc_p'    => ['fa-calendar-check-o', 'info', 'acc pengurus barang'],
-              'tolak_p'  => ['fa-calendar-check-o', 'info', 'di tolak pengurus barang'],
+              'tolak_p'  => ['fa-calendar-check-o', 'danger', 'di tolak pengurus barang'],
+              'selesai'  => ['fa-calendar-check-o', 'info', 'selesai'],
               'belum'    => ['fa-calendar-check-o', 'danger', 'belum']
             ];
 

@@ -134,6 +134,7 @@ class Brg_masuk extends CI_Controller
         'id_rekanan'        => $i->post('id_rekanan'),
         'tahun_pengadaan'   => $i->post('tahun_pengadaan'),
         'tgl_datang'        => $i->post('tgl_datang'),
+        'tanggal_permintaan'  => $i->post('tgl_permintaan') ? $i->post('tgl_permintaan') : date('Y-m-d'),
         'no_sp'             => $i->post('no_sp'),
         'id_paket_ekatalog' => $i->post('id_paket_ekatalog'),
         'ed_barang'         => $i->post('ed_barang'),

@@ -79,6 +79,10 @@ if (isset($error)) {
           </div>
 
           <div class="form-group">
+            <label>Tanggal Permintaan</label>
+            <input type="date" name="tgl_permintaan" class="form-control" value="<?php echo date('Y-m-d'); ?>">
+          </div>
+          <div class="form-group">
             <label>Harga Satuan</label>
             <input type="text" name="harga" class="form-control" placeholder="Rp...">
           </div>
@@ -149,7 +153,7 @@ if (isset($error)) {
           </div>
 
           <div class="form-group">
-            <label class="control-label">Tanggal SIP</label>
+            <label class="control-label">Tanggal SP</label>
             <input type="date" name="tgl_sip" class="form-control">
           </div>
 

@@ -108,16 +108,13 @@ if (isset($error)) {
           </div>
 
           <div class="form-group">
-            <label class="control-label">No BAST</label>
-            <input type="text" name="no_bast" class="form-control">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
             <label class="control-label">Tahun Pengadaan</label>
             <input type="number" name="tahun_pengadaan" class="form-control" placeholder="Tahun ...">
           </div>
+
+        </div>
+
+        <div class="col-md-6">
 
           <div class="form-group">
             <label>Sumber pengadaan</label>
@@ -168,6 +165,35 @@ if (isset($error)) {
           </div>
 
           <div class="form-group">
+            <label class="control-label">Jenis BAST</label>
+            <select name="jenis_bast" id="jenis_bast" class="form-control select2" style="width: 100%;">
+              <option value="">Pilih Jenis</option>
+              <option value="level1">Level 1 (7 Sampai 14 Hari)</option>
+              <option value="level2">Level 2 (14 Sampai 30 Hari)</option>
+              <option value="level3">Level 3 (30 Sampai 90 Hari)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tanggal BAST</label>
+            <input type="text" id="kalender-bast" name="tgl_bast" class="form-control" placeholder="Pilih tanggal">
+            <small id="range-info" class="text-muted"></small>
+
+            <!-- hidden input untuk DB -->
+            <input type="text" name="tgl_bast_start" id="tgl_bast_start">
+            <input type="text" name="tgl_bast_end" id="tgl_bast_end">
+          </div>
+
+
+
+          <div class="form-group">
+            <label class="control-label">No BAST</label>
+            <input type="text" name="no_bast" class="form-control">
+          </div>
+
+
+
+          <div class="form-group">
             <label class="control-label">Spesifikasi</label>
             <textarea class="form-control" name="spesifikasi"></textarea>
           </div>
@@ -188,6 +214,73 @@ if (isset($error)) {
 
 <script>
   $(document).ready(function() {
+    var calendar = flatpickr("#kalender-bast", {
+      mode: "single",
+      dateFormat: "Y-m-d",
+      clickOpens: false, // nonaktif sebelum pilih jenis
+      onChange: function(selectedDates) {
+        if (selectedDates.length > 0) {
+          $("#tgl_bast_start").val(flatpickr.formatDate(selectedDates[0], "Y-m-d"));
+        }
+      }
+    });
+
+    $("#jenis_bast").on("change", function() {
+      var jenis = $(this).val();
+      var today = new Date();
+
+      var minDate, maxDate;
+
+      if (jenis === "level1") {
+        minDate = new Date(today);
+        maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 14); // 24/9/2025
+      }
+
+      if (jenis === "level2") {
+        minDate = new Date(today);
+        minDate.setDate(today.getDate() + 15); // 25/9/2025
+        maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 30); // 10/10/2025
+      }
+
+      if (jenis === "level3") {
+        minDate = new Date(today);
+        minDate.setDate(today.getDate() + 31); // 11/10/2025
+        maxDate = new Date(today);
+        maxDate.setDate(today.getDate() + 90); // 9/12/2025
+      }
+
+      if (jenis) {
+        calendar.set("clickOpens", true);
+        calendar.set("minDate", minDate);
+        calendar.set("maxDate", maxDate);
+
+        // default pilih minDate
+        calendar.setDate(minDate);
+
+        // isi hidden input otomatis
+        $("#tgl_bast_start").val(flatpickr.formatDate(minDate, "Y-m-d"));
+        $("#tgl_bast_end").val(flatpickr.formatDate(maxDate, "Y-m-d"));
+
+        // tampilkan info range
+        function formatView(d) {
+          const bulan = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+          ];
+          return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
+        }
+
+        $("#range-info").text("Range tanggal: " + formatView(minDate) + " s/d " + formatView(maxDate));
+      } else {
+        calendar.clear();
+        calendar.set("clickOpens", false);
+        $("#tgl_bast_start").val("");
+        $("#tgl_bast_end").val("");
+        $("#range-info").text("Pilih jenis BAST terlebih dahulu");
+      }
+    });
 
     function hitungNilaiPesanan() {
       var jumlah = parseFloat($("input[name='jumlah']").val()) || 0;

@@ -28,57 +28,63 @@ $head_site = $this->konfigurasi_model->listing();
   <link rel="stylesheet" href="<?php echo base_url() ?>assets/font/css/font-awesome.min.css">
   <!-- Ionicons 
     <link rel="stylesheet" href="<?php echo base_url() ?>assets/ionic/css/ionic.min.css">-->
-    <!-- DataTables -->
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/plugins/datatables/dataTables.bootstrap.css">
-    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap.min.css" /> -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/plugins/datatables/dataTables.bootstrap.css">
+  <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.bootstrap.min.css" /> -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.min.css">
 
 
 
-    <!--  <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/css/jquery.dataTables.css"> -->
-    <!-- Theme style -->
-    <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/dist/css/AdminLTE.css">
+  <!--  <link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>assets/css/jquery.dataTables.css"> -->
+  <!-- Theme style -->
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/dist/css/AdminLTE.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
    folder instead of downloading all of them to reduce the load. -->
-   <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/dist/css/skins/_all-skins.min.css">
-   <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'assets/css/bootstrap.css' ?>"> -->
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/dist/css/skins/_all-skins.min.css">
+  <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url() . 'assets/css/bootstrap.css' ?>"> -->
 
-   <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/plugins/morris/morris.css">
+  <link rel="stylesheet" href="<?php echo base_url() ?>assets/admin/plugins/morris/morris.css">
 
-   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
       <![endif]-->
 
 
-      <!-- jQuery 2.1.4 -->
-      <script src="<?php echo base_url() ?>assets/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-      <script src="<?php echo base_url() ?>assets/admin/plugins/jQuery/jquery.maskMoney.min.js"></script>
-      <script src="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-ui.min.js"></script>
-      <!-- Select2 -->
-      <script src="<?php echo base_url() ?>assets/admin/plugins/select2/select2.full.min.js"></script>
-      <!-- <link href="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-ui.css" rel="stylesheet"> -->
-      <link href="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-uiku.css" rel="stylesheet">
-      <script src="<?php echo base_url('assets/js/jquery.chained.js') ?>" type="text/javascript" charset="utf-8" async defer></script>
-      <style>
-        table.dataTable thead th,
-        div.DTFC_LeftWrapper table.dataTable thead th,
-        div.DTFC_RightWrapper table.dataTable thead th {
-          background-color: #337ab7 !important;
-          color: white !important;
-          text-align: center !important;
-          border: 1px solid #ddd !important;
-        }
-      </style>
 
-    </head>
+  <!-- jQuery 2.1.4 -->
+  <script src="<?php echo base_url() ?>assets/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+  <script src="<?php echo base_url() ?>assets/admin/plugins/jQuery/jquery.maskMoney.min.js"></script>
+  <script src="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-ui.min.js"></script>
+  <!-- Select2 -->
+  <script src="<?php echo base_url() ?>assets/admin/plugins/select2/select2.full.min.js"></script>
+  <!-- <link href="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-ui.css" rel="stylesheet"> -->
+  <link href="<?php echo base_url() ?>assets/admin/plugins/jQueryUI/jquery-uiku.css" rel="stylesheet">
+  <script src="<?php echo base_url('assets/js/jquery.chained.js') ?>" type="text/javascript" charset="utf-8" async defer></script>
 
-    <!-- Untuk Merubah Perkecil Nav -->
-    <!-- <body class="skin-yellow sidebar-mini sidebar-collapse"> -->
+  <!-- Load Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
-      <!-- Untuk Perlebar Nav -->
+  <style>
+    table.dataTable thead th,
+    div.DTFC_LeftWrapper table.dataTable thead th,
+    div.DTFC_RightWrapper table.dataTable thead th {
+      background-color: #337ab7 !important;
+      color: white !important;
+      text-align: center !important;
+      border: 1px solid #ddd !important;
+    }
+  </style>
 
-      <body class="sidebar-mini skin-red-light">
-        <div class="wrapper">
+</head>
+
+<!-- Untuk Merubah Perkecil Nav -->
+<!-- <body class="skin-yellow sidebar-mini sidebar-collapse"> -->
+
+<!-- Untuk Perlebar Nav -->
+
+<body class="sidebar-mini skin-red-light">
+  <div class="wrapper">

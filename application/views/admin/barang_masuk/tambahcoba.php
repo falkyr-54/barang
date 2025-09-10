@@ -214,6 +214,37 @@ if (isset($error)) {
 
 <script>
   $(document).ready(function() {
+
+    $("#jenis_bast").on("change", function() {
+      var jenis = $(this).val();
+
+      if (jenis === "level1") {
+        // Kosongkan & freeze
+        $("input[name='harga']").val("").prop("readonly", true).removeAttr("required");
+        $("input[name='ed_barang']").val("").prop("readonly", true).removeAttr("required");
+        $("input[name='no_bast']").val("").prop("readonly", true).removeAttr("required");
+        $("input[name='tgl_datang']").val("").prop("readonly", true).removeAttr("required");
+        $("input[name='no_batch']").val("").prop("readonly", true).removeAttr("required");
+
+        // Upload gambar → disable & not required
+        $("input[name='gambar']").val("").prop("disabled", true).removeAttr("required");
+
+      } else {
+        // Normal kembali
+        $("input[name='harga']").prop("readonly", false);
+        $("input[name='ed_barang']").prop("readonly", false);
+        $("input[name='no_bast']").prop("readonly", false);
+        $("input[name='tgl_datang']").prop("readonly", false);
+        $("input[name='no_batch']").prop("readonly", false);
+        $("input[name='gambar']").prop("disabled", false);
+
+        // Kalau mau kembalikan required, bisa tambahkan di sini:
+        // $("input[name='harga']").attr("required", true);
+        // $("input[name='ed_barang']").attr("required", true);
+        // dst...
+      }
+    });
+
     var calendar = flatpickr("#kalender-bast", {
       mode: "single",
       dateFormat: "Y-m-d",

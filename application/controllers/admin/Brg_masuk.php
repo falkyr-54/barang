@@ -88,7 +88,7 @@ class Brg_masuk extends CI_Controller
       }
 
       // === CASE JIKA ADMIN ===
-      $upload_file = $_FILES['gambar']['name'];
+      $upload_file = isset($_FILES['gambar']['name']) ? $_FILES['gambar']['name'] : null;
       $gambar = null;
 
       if (!empty($upload_file)) {
@@ -119,22 +119,23 @@ class Brg_masuk extends CI_Controller
       }
 
 
+
       // Data untuk admin
       $data = array(
         'id_satker'         => $id_satker,
         'id_barang'         => $i->post('id_barang'),
         'id_rekanan'        => $i->post('id_rekanan'),
         'tahun_pengadaan'   => $i->post('tahun_pengadaan'),
-        'tgl_datang'        => $i->post('tgl_datang'),
-        'tanggal_permintaan'  => $i->post('tgl_permintaan') ? $i->post('tgl_permintaan') : date('Y-m-d'),
+        'tgl_datang'        => $i->post('tgl_datang') ?: date('Y-m-d'), // fallback hari ini
+        'tanggal_permintaan' => $i->post('tgl_permintaan') ?: date('Y-m-d'),
         'no_sp'             => $i->post('no_sp'),
         'id_paket_ekatalog' => $i->post('id_paket_ekatalog'),
         'ed_barang'         => $i->post('ed_barang'),
         'no_bacth'          => $i->post('no_bast'),
         'jenis_pemesanan'   => $i->post('jenis_pemesanan'),
-        'jenis_bast'     => $i->post('jenis_bast'),
-        'tanggal_bast_awal'          => $i->post('tgl_bast_start'),
-        'tanggal_bast_akhir'         => $i->post('tgl_bast_end'),
+        'jenis_bast'        => $i->post('jenis_bast'),
+        'tanggal_bast_awal' => $i->post('tgl_bast_start'),
+        'tanggal_bast_akhir' => $i->post('tgl_bast_end'),
         'metode_pengadaan'  => $i->post('metode_pengadaan'),
         'tgl_sip'           => $i->post('tgl_sip'),
         'nilai_pesenan'     => $i->post('nilai_pesanan'),
@@ -143,14 +144,27 @@ class Brg_masuk extends CI_Controller
         'jumlah'            => $i->post('jumlah'),
         'harga'             => $i->post('harga'),
         'harga_satuan'      => $i->post('harga'),
-        'tgl_bacth_barang_datang' => $i->post('tgl_datang'),
+        'tgl_bacth_barang_datang' => $i->post('tgl_datang') ?: date('Y-m-d'),
         'spesifikasi'       => $i->post('spesifikasi'),
         'tkdn'              => $i->post('tkdn'),
         'sumber'            => $i->post('sumber'),
-        'gambar'            => $gambar, // null jika tidak upload
+        'gambar'            => $gambar,
         'input_by'          => $this->session->userdata('username'),
         'tgl_input'         => date('Y-m-d H:i:s')
       );
+
+      // === Sesuaikan field jika Level 1 ===
+      if ($i->post('jenis_bast') === 'level1') {
+        $data['harga']                  = 0;
+        $data['harga_satuan']           = 0;
+        $data['ed_barang']              = null;
+        $data['no_bacth']               = null;
+        // masih butuh isi tgl_datang karena kolom NOT NULL, fallback pakai hari ini
+        $data['tgl_datang']             = date('Y-m-d');
+        $data['tgl_bacth_barang_datang'] = date('Y-m-d');
+        $data['no_bacth_lot_barang']    = null;
+        $data['gambar']                 = null;
+      }
 
       $this->Brg_masuk_model->tambah($data);
       $this->session->set_flashdata('sukses', 'Data berhasil disimpan');

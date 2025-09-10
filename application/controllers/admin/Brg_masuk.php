@@ -97,19 +97,7 @@ class Brg_masuk extends CI_Controller
         $config['max_size']       = '2000'; // KB (2 MB)
         $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload('gambar')) {
-          // Jika gagal upload, kembalikan ke form
-          $data = array(
-            'title'      => 'Transaksi masuk',
-            'rekanan'    => $rekanan,
-            'barang'     => $barang,
-            'id_satker'  => $id_satker,
-            'error'      => $this->upload->display_errors(),
-            'isi'        => 'admin/barang_masuk/tambahcoba'
-          );
-          $this->load->view('admin/layout/wrapper', $data);
-          return; // hentikan eksekusi
-        } else {
+        if ($this->upload->do_upload('gambar')) {
           $upload_data = array('uploads' => $this->upload->data());
           $gambar = $upload_data['uploads']['file_name'];
 
@@ -124,8 +112,12 @@ class Brg_masuk extends CI_Controller
           $config['thumb_marker']   = '';
           $this->load->library('image_lib', $config);
           $this->image_lib->resize();
+        } else {
+          // kalau gagal upload → abaikan saja, tidak return
+          $gambar = null;
         }
       }
+
 
       // Data untuk admin
       $data = array(

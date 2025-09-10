@@ -180,8 +180,8 @@ if (isset($error)) {
             <small id="range-info" class="text-muted"></small>
 
             <!-- hidden input untuk DB -->
-            <input type="text" name="tgl_bast_start" id="tgl_bast_start">
-            <input type="text" name="tgl_bast_end" id="tgl_bast_end">
+            <input type="hidden" name="tgl_bast_start" id="tgl_bast_start">
+            <input type="hidden" name="tgl_bast_end" id="tgl_bast_end">
           </div>
 
 

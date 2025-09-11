@@ -187,60 +187,111 @@ class Brg_masuk extends CI_Controller
 
 
   //FUNGSI EDIT
-  public function edit($id_barang_masuk)
-  {
-
-    $brg              = $this->Brg_masuk_model->detail($id_barang_masuk);
+public function edit($id_barang_masuk)
+{
+    $brg  = $this->Brg_masuk_model->detail($id_barang_masuk);
     $id_barang_masuk  = $brg['id_barang_masuk'];
     $satuan           = $this->Satuan_model->listing();
     $rekanan          = $this->Rekanan_model->listing();
-    $expired6bln = $this->Brg_keluar_model->list_expired6bulan();
-    $expired3bln = $this->Brg_keluar_model->list_expired3bulan();
-    $expired1bln = $this->Brg_keluar_model->list_expired1bulan();
-    // print_r($diskusi);die;
 
     $data = array(
-      'title'    => 'Edit Barang masuk',
-      'brg'        => $brg,
-      'rekanan'   => $rekanan,
-      'satuan'    => $satuan,
-      'expired6bulan' => $expired6bln,
-      'expired3bulan' => $expired3bln,
-      'expired1bulan' => $expired1bln,
-      'isi'      => 'admin/barang_masuk/edit'
+      'title'   => 'Edit Barang masuk',
+      'brg'     => $brg,
+      'rekanan' => $rekanan,
+      'satuan'  => $satuan,
+      'isi'     => 'admin/barang_masuk/edit'
     );
     $this->load->view('admin/layout/wrapper', $data);
 
     $valid = $this->form_validation;
-
     $valid->set_rules(
       'nama_barang',
       'Nama Barang',
       'required',
-      array('required'    => 'Nama Barang harus diisi')
+      array('required' => 'Nama Barang harus diisi')
     );
 
     if ($valid->run()) {
-
       $i   = $this->input;
+
+      // ============= Proses Upload Gambar =============
+      $upload_file = $_FILES['gambar']['name'];
+      $gambar = $brg['gambar']; // default gambar lama
+
+      if (!empty($upload_file)) {
+        $config['upload_path']    = './assets/upload/image/';
+        $config['allowed_types']  = 'gif|jpg|png|jpeg';
+        $config['max_size']       = 2000; // 2MB
+        $config['encrypt_name']   = TRUE;
+
+        $this->load->library('upload', $config);
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload('gambar')) {
+          $upload_data = array('uploads' => $this->upload->data());
+          $gambar = $upload_data['uploads']['file_name'];
+
+          // Hapus gambar lama + thumbnail lama
+          if (!empty($brg['gambar']) && file_exists('./assets/upload/image/' . $brg['gambar'])) {
+            unlink('./assets/upload/image/' . $brg['gambar']);
+            if (file_exists('./assets/upload/image/thumbs/' . $brg['gambar'])) {
+              unlink('./assets/upload/image/thumbs/' . $brg['gambar']);
+            }
+          }
+
+          // Buat thumbnail baru
+          $config['image_library']  = 'gd2';
+          $config['source_image']   = './assets/upload/image/' . $gambar;
+          $config['new_image']      = './assets/upload/image/thumbs/';
+          $config['create_thumb']   = TRUE;
+          $config['maintain_ratio'] = TRUE;
+          $config['width']          = 150;
+          $config['height']         = 150;
+          $config['thumb_marker']   = '';
+          $this->load->library('image_lib', $config);
+          $this->image_lib->resize();
+        } else {
+          // gagal upload → tetap pakai gambar lama
+          $gambar = $brg['gambar'];
+        }
+      }
+
+      // ============= Simpan Data =============
       $data = array(
-        'id_barang_masuk'      => $id_barang_masuk,
-        'id_barang'       => $i->post('id_barang'),
-        'id_rekanan'       => $i->post('id_rekanan'),
-        'jumlah'           => $i->post('jumlah'),
-        'harga'           => $i->post('harga'),
-        'tahun_pengadaan' => $i->post('tahun_pengadaan'),
-        'tgl_datang'       => $i->post('tgl_datang'),
-        'spesifikasi'     => $i->post('spesifikasi'),
-        'edit_by'         => $this->session->userdata('username'),
-        'tgl_edit'          => date('Y-m-d H:i:s')
+        'id_barang_masuk'     => $id_barang_masuk,
+        'id_barang'           => $i->post('id_barang'),
+        'id_rekanan'          => $i->post('id_rekanan'),
+        'jumlah'              => $i->post('jumlah'),
+        'harga_satuan'        => $i->post('harga'),
+        'nilai_pesenan'       => $i->post('nilai_pesanan'),
+        'tkdn'                => $i->post('tkdn'),
+        'id_paket_ekatalog'   => $i->post('id_paket_ekatalog'),
+        'ed_barang'           => $i->post('ed_barang'),
+        'tahun_pengadaan'     => $i->post('tahun_pengadaan'),
+        'sumber'              => $i->post('sumber'),
+        'jenis_pemesanan'     => $i->post('jenis_pemesanan'),
+        'metode_pengadaan'    => $i->post('metode_pengadaan'),
+        'tgl_datang'          => $i->post('tgl_datang'),
+        'tgl_sip'             => $i->post('tgl_sip'),
+        'no_sp'               => $i->post('no_sp'),
+        'no_bacth_lot_barang' => $i->post('no_batch'),
+        'jenis_bast'          => $i->post('jenis_bast'),
+        'tanggal_bast_awal'   => $i->post('tgl_bast_start'),
+        'tanggal_bast_akhir'  => $i->post('tgl_bast_end'),
+        'no_bacth'            => $i->post('no_bast'),
+        'spesifikasi'         => $i->post('spesifikasi'),
+        'gambar'              => $gambar, // hasil upload / lama
+        'edit_by'             => $this->session->userdata('username'),
+        'tgl_edit'            => date('Y-m-d H:i:s')
       );
 
       $this->Brg_masuk_model->update($data);
       $this->session->set_flashdata('sukses', 'Data berhasil diubah');
-      redirect(base_url('admin/barang/riwayat/' . $brg['id_barang']));
+      redirect(base_url('admin/barang/riwayat/' . $brg['id_barang'] . '/' . $brg['id_satker']));
     }
-  }
+}
+
+
 
 
   // Hapus

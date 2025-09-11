@@ -12,7 +12,7 @@ $today = date('Y-m-d');
 $readonly = false;
 
 // jika hari ini sudah lewat tanggal_bast_akhir
-if(!empty($brg['tanggal_bast_akhir']) && $today > $brg['tanggal_bast_akhir']){
+if (!empty($brg['tanggal_bast_akhir']) && $today > $brg['tanggal_bast_akhir']) {
     $readonly = false; // semua bisa diedit
     $brg['jenis_bast'] = 'level2'; // override jenis_bast jadi level2
 } else {
@@ -189,6 +189,7 @@ if(!empty($brg['tanggal_bast_akhir']) && $today > $brg['tanggal_bast_akhir']){
                 <div class="form-group">
                     <label class="control-label">Jenis BAST</label>
                     <select name="jenis_bast" id="jenis_bast" class="form-control select2" style="width: 100%;">
+                        <option value="">Pilih Jenis</option>
                         <option value="level1" <?= ($brg['jenis_bast'] == 'level1') ? 'selected' : ''; ?>>Level 1 (7-14 Hari)</option>
                         <option value="level2" <?= ($brg['jenis_bast'] == 'level2') ? 'selected' : ''; ?>>Level 2 (14-30 Hari)</option>
                         <option value="level3" <?= ($brg['jenis_bast'] == 'level3') ? 'selected' : ''; ?>>Level 3 (30-90 Hari)</option>
@@ -230,88 +231,135 @@ if(!empty($brg['tanggal_bast_akhir']) && $today > $brg['tanggal_bast_akhir']){
 
 <!-- Script JS -->
 <script>
-$(function() {
-    $(".select2").select2();
-});
+    $(function() {
+        $(".select2").select2();
+    });
 
-$(document).ready(function() {
-    // hilangkan readonly jika hari ini > tanggal_bast_akhir
-    const tglBastAkhir = $("#tgl_bast_end").val();
-    if(tglBastAkhir && new Date() > new Date(tglBastAkhir)){
-        $("#gambar").prop("disabled", false);
-        $("input[name='harga'], input[name='ed_barang'], input[name='no_bast'], input[name='tgl_datang'], input[name='no_batch']").prop("readonly", false);
-        $("#jenis_bast").val('level2').trigger('change');
-    }
+    $(document).ready(function() {
+        // hilangkan readonly jika hari ini > tanggal_bast_akhir
+        const tglBastAkhir = $("#tgl_bast_end").val();
+        const jenisBast = $("#jenis_bast").val();
 
-    // preview gambar baru
-    $("#gambar").change(function() {
-        let input = this;
-        if(input.files && input.files[0]){
-            $("#preview-baru").empty().show().append('<p class="text-muted">Preview gambar baru:</p>');
-            Array.from(input.files).forEach(file => {
-                let reader = new FileReader();
-                reader.onload = function(e){
-                    $("<img>").attr("src", e.target.result)
-                        .css({'max-height':'150px','border':'1px solid #ccc','padding':'3px','margin-top':'5px'})
-                        .appendTo("#preview-baru");
-                };
-                reader.readAsDataURL(file);
-            });
+        function setReadonly(status) {
+            $("#gambar").prop("disabled", status);
+            $("input[name='harga'], input[name='ed_barang'], input[name='no_bast'], input[name='tgl_datang'], input[name='no_batch']").prop("readonly", status);
         }
-    });
 
-    // Flatpickr kalender BAST
-    var calendar = flatpickr("#kalender-bast", {
-        mode: "single",
-        dateFormat: "Y-m-d",
-        clickOpens: false,
-    });
-
-    function formatView(d) {
-        const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
-        return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
-    }
-
-    function setRange(jenis) {
-        var today = new Date(), minDate, maxDate;
-        if(jenis === "level1"){ minDate = new Date(today); minDate.setDate(10); maxDate = new Date(minDate); maxDate.setDate(minDate.getDate()+14); }
-        if(jenis === "level2"){ minDate = new Date(today); minDate.setDate(today.getDate()+15); maxDate = new Date(today); maxDate.setDate(today.getDate()+30); }
-        if(jenis === "level3"){ minDate = new Date(today); minDate.setDate(today.getDate()+31); maxDate = new Date(today); maxDate.setDate(today.getDate()+90); }
-        if(jenis){
-            calendar.set("clickOpens", true);
-            calendar.set("minDate", minDate);
-            calendar.set("maxDate", maxDate);
-            if(!$("#kalender-bast").val()) calendar.setDate(minDate);
-            $("#tgl_bast_start").val(flatpickr.formatDate(minDate,"Y-m-d"));
-            $("#tgl_bast_end").val(flatpickr.formatDate(maxDate,"Y-m-d"));
-            $("#range-info").text("Range tanggal: "+formatView(minDate)+" s/d "+formatView(maxDate));
-        } else {
-            calendar.clear(); calendar.set("clickOpens", false);
-            $("#tgl_bast_start").val(""); $("#tgl_bast_end").val("");
-            $("#range-info").text("Pilih jenis BAST terlebih dahulu");
+        // Default: readonly jika jenis_bast NULL
+        if (!jenisBast) {
+            setReadonly(true);
         }
-    }
 
-    $("#jenis_bast").on("change", function(){ setRange($(this).val()); });
-    if($("#jenis_bast").val()) setRange($("#jenis_bast").val());
+        $("#jenis_bast").on("change", function() {
+            const val = $(this).val();
+            if (val === "level1" && (!tglBastAkhir || new Date() <= new Date(tglBastAkhir))) {
+                setReadonly(true);
+            } else if (val === "level2" || val === "level3") {
+                setReadonly(false);
+            }
+        });
+        if (tglBastAkhir && new Date() > new Date(tglBastAkhir)) {
+            $("#gambar").prop("disabled", false);
+            $("input[name='harga'], input[name='ed_barang'], input[name='no_bast'], input[name='tgl_datang'], input[name='no_batch']").prop("readonly", false);
+            $("#jenis_bast").val('level2').trigger('change');
+        }
 
-    // Autocomplete nama barang
-    $("#nama_barang").autocomplete({
-        source: function(request, response){
-            $.ajax({
-                url: "<?php echo base_url('admin/brg_masuk/getbarang') ?>",
-                dataType: "json",
-                data: request,
-                success: function(data){ if(data.response=='true') response(data.message); }
-            });
-        },
-        minLength: 3,
-        select: function(event, ui){
-            event.preventDefault();
-            $(this).val(ui.item.label);
-            $("#id_barang").val(ui.item.value);
-            $("#satuan").val(ui.item.satuan);
-        },
+        // preview gambar baru
+        $("#gambar").change(function() {
+            let input = this;
+            if (input.files && input.files[0]) {
+                $("#preview-baru").empty().show().append('<p class="text-muted">Preview gambar baru:</p>');
+                Array.from(input.files).forEach(file => {
+                    let reader = new FileReader();
+                    reader.onload = function(e) {
+                        $("<img>").attr("src", e.target.result)
+                            .css({
+                                'max-height': '150px',
+                                'border': '1px solid #ccc',
+                                'padding': '3px',
+                                'margin-top': '5px'
+                            })
+                            .appendTo("#preview-baru");
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        // Flatpickr kalender BAST
+        var calendar = flatpickr("#kalender-bast", {
+            mode: "single",
+            dateFormat: "Y-m-d",
+            clickOpens: false,
+        });
+
+        function formatView(d) {
+            const bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+            return d.getDate() + " " + bulan[d.getMonth()] + " " + d.getFullYear();
+        }
+
+        function setRange(jenis) {
+            var today = new Date(),
+                minDate, maxDate;
+            if (jenis === "level1") {
+                minDate = new Date(today);
+                minDate.setDate(10);
+                maxDate = new Date(minDate);
+                maxDate.setDate(minDate.getDate() + 14);
+            }
+            if (jenis === "level2") {
+                minDate = new Date(today);
+                minDate.setDate(today.getDate() + 15);
+                maxDate = new Date(today);
+                maxDate.setDate(today.getDate() + 30);
+            }
+            if (jenis === "level3") {
+                minDate = new Date(today);
+                minDate.setDate(today.getDate() + 31);
+                maxDate = new Date(today);
+                maxDate.setDate(today.getDate() + 90);
+            }
+            if (jenis) {
+                calendar.set("clickOpens", true);
+                calendar.set("minDate", minDate);
+                calendar.set("maxDate", maxDate);
+                if (!$("#kalender-bast").val()) calendar.setDate(minDate);
+                $("#tgl_bast_start").val(flatpickr.formatDate(minDate, "Y-m-d"));
+                $("#tgl_bast_end").val(flatpickr.formatDate(maxDate, "Y-m-d"));
+                $("#range-info").text("Range tanggal: " + formatView(minDate) + " s/d " + formatView(maxDate));
+            } else {
+                calendar.clear();
+                calendar.set("clickOpens", false);
+                $("#tgl_bast_start").val("");
+                $("#tgl_bast_end").val("");
+                $("#range-info").text("Pilih jenis BAST terlebih dahulu");
+            }
+        }
+
+        $("#jenis_bast").on("change", function() {
+            setRange($(this).val());
+        });
+        if ($("#jenis_bast").val()) setRange($("#jenis_bast").val());
+
+        // Autocomplete nama barang
+        $("#nama_barang").autocomplete({
+            source: function(request, response) {
+                $.ajax({
+                    url: "<?php echo base_url('admin/brg_masuk/getbarang') ?>",
+                    dataType: "json",
+                    data: request,
+                    success: function(data) {
+                        if (data.response == 'true') response(data.message);
+                    }
+                });
+            },
+            minLength: 3,
+            select: function(event, ui) {
+                event.preventDefault();
+                $(this).val(ui.item.label);
+                $("#id_barang").val(ui.item.value);
+                $("#satuan").val(ui.item.satuan);
+            },
+        });
     });
-});
 </script>

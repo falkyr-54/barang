@@ -128,7 +128,6 @@ class Brg_masuk extends CI_Controller
             'tgl_sip'           => $i->post('tgl_sip'),
             'nilai_pesenan' => $i->post('nilai_pesanan'),
             'no_bacth_lot_barang' => $i->post('no_batch'),
-            'status_pesanaan' => $i->post('status_pesanan'),
             'jumlah'            => $i->post('jumlah'),
             'harga'             => $i->post('harga'),
             'harga_satuan'      => $i->post('harga'),

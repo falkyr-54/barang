@@ -1,10 +1,10 @@
 <?php
 // Check error
-echo validation_errors('<div class="alert alert-warning">','</div>');
+echo validation_errors('<div class="alert alert-warning">', '</div>');
 
 // Error upload file
-if(isset($error)) {
-	echo '<div class="alert alert-warning">'.$error.'</div>';	
+if (isset($error)) {
+  echo '<div class="alert alert-warning">' . $error . '</div>';
 }
 ?>
 
@@ -24,14 +24,15 @@ if(isset($error)) {
 
           <div class="col-md-4">
 
-          <!--  <div class="form-group has-warning">
+            <!--  <div class="form-group has-warning">
             <label>Satker</label>
             <select class="form-control" name="id_satker">
               <option value="">Pilih Satker</option>
               <?php foreach ($satker as $satker) { ?>
                 <option value="<?php echo $satker['id_satker'] ?>"
-                  <?php if(isset($_POST['id_satker']) && $_POST['id_satker']==$satker['id_satker']) { 
-                    echo "selected"; } ?>><?php echo $satker['nama_satker'] ?>
+                  <?php if (isset($_POST['id_satker']) && $_POST['id_satker'] == $satker['id_satker']) {
+                    echo "selected";
+                  } ?>><?php echo $satker['nama_satker'] ?>
                   </option>
                 <?php } ?>
               </select>
@@ -60,6 +61,8 @@ if(isset($error)) {
               <select class="form-control" name="akses_level">
                 <option value="">-Pilih Level-</option>
                 <option value="admin">administrator</option>
+                <option value="adminpptk">Admin dan PPTK</option>
+                <option value="pj_klasterpptk">PJ Klaster dan PPTK</option>
                 <option value="pj_klaster">pj klaster</option>
                 <option value="kapustu">kapustu</option>
                 <option value="kelurahan">admin pustu</option>
@@ -113,28 +116,28 @@ if(isset($error)) {
       <input type="reset" name="reset" value="Reset" class="btn btn-default btn-md">
     </div>
   </div>
-</div>
-</div>
+  </div>
+  </div>
 </form>
 
 
 <script>
-  $(function() {                     
-    $( "#nama_lengkap" ).autocomplete({ //the recipient text field with id #username
-      source: function( request, response ) {
+  $(function() {
+    $("#nama_lengkap").autocomplete({ //the recipient text field with id #username
+      source: function(request, response) {
         $.ajax({
           url: "<?php echo base_url('admin/brg_keluar/getnip') ?>",
           dataType: "json",
           data: request,
-          success: function(data){
-            if(data.response == 'true') {
+          success: function(data) {
+            if (data.response == 'true') {
               response(data.message);
             }
           }
         });
       },
       minLength: 3,
-      select: function( event, ui ) {
+      select: function(event, ui) {
         event.preventDefault();
         $(this).val(ui.item.label);
         $("#id_pegawai").val(ui.item.value);
@@ -142,20 +145,22 @@ if(isset($error)) {
       },
 
     });
-  }); 
-</script>  
+  });
+</script>
 
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 <script>
-  $(document).ready(function(){
-    $('#id_klaster').change(function(){
+  $(document).ready(function() {
+    $('#id_klaster').change(function() {
       var id_klaster = $(this).val();
-      if(id_klaster != ''){
+      if (id_klaster != '') {
         $.ajax({
-          url:"<?php echo base_url('admin/user/get_unit_by_klaster'); ?>",
-          method:"POST",
-          data:{id_klaster:id_klaster},
-          success:function(data){
+          url: "<?php echo base_url('admin/user/get_unit_by_klaster'); ?>",
+          method: "POST",
+          data: {
+            id_klaster: id_klaster
+          },
+          success: function(data) {
             $('#id_unit').html(data);
           }
         });

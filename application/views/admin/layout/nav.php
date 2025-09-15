@@ -30,6 +30,13 @@
 
         <li><a href="<?php echo base_url('admin/barang/proses') ?>"><i class="fa fa-cubes"></i>Proses Transaksi </a></li>
 
+<<<<<<< HEAD
+=======
+        <?php if($this->session->userdata('level') == "pptk") { ?>
+          <li><a href="<?php echo base_url('admin/permintaan_pengadaan/cari_approval') ?>"><i class="fa fa-history"></i>Riwayat Permintaan Pengadaan </a></li>
+        <?php } ?>
+
+>>>>>>> 317316a39cfd535efb1725f396be81380590873f
         
         <?php if($this->session->userdata('level') == "pj_klaster"||$this->session->userdata('level') == "kapustu") { ?>
           <li><a href="<?php echo base_url('admin/pj_klaster/cari_approval') ?>"><i class="fa fa-cubes"></i>Data barang acc </a></li>

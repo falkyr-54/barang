@@ -61,8 +61,7 @@ if (isset($error)) {
               <select class="form-control" name="akses_level">
                 <option value="">-Pilih Level-</option>
                 <option value="admin">administrator</option>
-                <option value="adminpptk">Admin dan PPTK</option>
-                <option value="pj_klasterpptk">PJ Klaster dan PPTK</option>
+                <option value="pptk">PPTK</option>
                 <option value="pj_klaster">pj klaster</option>
                 <option value="kapustu">kapustu</option>
                 <option value="kelurahan">admin pustu</option>

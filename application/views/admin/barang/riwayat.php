@@ -23,6 +23,8 @@ if ($this->session->flashdata('sukses')) {
 }
 ?>
 
+
+
 <div class="clearfix"></div>
 </div><!-- /.content-wrapper -->
 
@@ -37,6 +39,7 @@ if ($this->session->flashdata('sukses')) {
     <table id="example1" class="table table-bordered table-striped">
       <thead>
 
+<<<<<<< HEAD
       <?php if ($this->session->userdata('level') == "admin") { ?>
         <a href="<?php echo base_url('admin/brg_masuk/tambah/' . $barang['id_barang']) ?>" class="btn bg-maroon margin">
           <i class="fa fa-plus"></i> Tambah</a> 
@@ -144,6 +147,164 @@ foreach ($filtered_masuk as $masuk): ?>
 </div>
 <!-- end riwayat jabatan -->
 
+=======
+        <?php if ($this->session->userdata('level') == "admin" || $this->session->userdata('level') == "pptk") { ?>
+          <a href="<?php echo base_url('admin/brg_masuk/tambah/' . $barang['id_barang']) ?>" class="btn bg-maroon margin">
+            <i class="fa fa-plus"></i> Tambah</a>
+        <?php } ?>
+        <?php if ($this->session->userdata('level') == "pj_klaster"): ?>
+
+
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalPengadaan">
+            <i class="fa fa-paper-plane"></i> Kirim Permintaan Pengadaan
+          </button>
+
+        <?php endif; ?>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modalPengadaan" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+              <div class="modal-header bg-primary">
+                <h4 class="modal-title">Kirim Permintaan Pengadaan</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+
+              <form action="<?= base_url('admin/permintaan_pengadaan/ajukanPengadaan') ?>" method="post">
+                <div class="modal-body">
+                  <input type="hidden" name="id_barang" value="<?= $barang['id_barang'] ?>">
+                  <input type="hidden" name="id_satker" value="<?= $this->session->userdata('id_satker') ?>">
+                  <input type="hidden"
+                    name="tanggal_request_pengadaan"
+                    value="<?= date('Y-m-d H:i:s') ?>">
+                  <input type="hidden" name="nama_request" class="form-control" value="<?= $this->session->userdata('username') ?>">
+                  <input type="hidden" name="input_by" class="form-control" value="<?= $this->session->userdata('level') ?>">
+                  <p>Kirim Permintaan Pengadaan untuk barang:
+                    <strong><?= $barang['nama_barang'] ?></strong>
+                  </p>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">
+                    <i class="fa fa-paper-plane"></i> Kirim
+                  </button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+
+        <hr>
+
+
+        <tr class="bg-primary">
+          <th width="17">#</th>
+          <th width="17">Gambar</th>
+          <th width="17">Nama Barang</th>
+          <th width="27">Tanggal</th>
+          <th width="27">Sumber</th>
+          <th width="27">TKDN</th>
+          <th width="27">Penyedia</th>
+          <th width="74">Spesifikasi</th>
+          <th width="27">Jumlah</th>
+          <th width="27">harga+ppn</th>
+          <th width="27">Stok</th>
+          <th width="174">Aksi</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <?php
+        // --- Hitung stok dan filter di sini ---
+        $filtered_masuk = [];
+        foreach ($masuk as $m) {
+          $id_barang       = $m['id_barang'];
+          $id_barang_masuk = $m['id_barang_masuk'];
+          $stok_id         = $this->Brg_keluar_model->get_total_id($id_barang, $id_barang_masuk);
+          $stok_tersisa    = $m['jumlah'] - $stok_id['total'];
+          $m['stok_tersisa'] = $stok_tersisa;
+
+          // Filter: admin unit hanya lihat stok > 0
+          if (
+            ($this->session->userdata('level') == "admin_poli"
+              || $this->session->userdata('level') == "kelurahan")
+            && $stok_tersisa <= 0
+          ) {
+            continue;
+          }
+
+
+          $filtered_masuk[] = $m;
+        }
+
+        $level = $this->session->userdata('level');
+        $stok_aktif = true; // hanya stok lama pertama yg masih ada bisa transaksi
+        $i = 1;
+        foreach ($filtered_masuk as $masuk): ?>
+          <tr>
+            <td><?= $i ?></td>
+            <td>
+              <?php if ($masuk['gambar'] == ""): ?>
+                No photo
+              <?php else: ?>
+                <img src="<?= base_url('assets/upload/image/thumbs/' . $masuk['gambar']) ?>" style="max-width: 50px; height:auto;">
+              <?php endif; ?>
+            </td>
+            <td><?= $masuk['nama_barang'] ?></td>
+            <td><?= $masuk['tgl_datang'] ?></td>
+            <td><?= $masuk['sumber'] ?></td>
+            <td><?= $masuk['tkdn'] ?></td>
+            <td><?= $masuk['nama_rekanan'] ?></td>
+            <td><?= $masuk['spesifikasi'] ?></td>
+            <td><?= $masuk['jumlah'] ?></td>
+            <td><?= $masuk['harga'] ?></td>
+            <td><?= $masuk['stok_tersisa'] ?></td>
+            <td>
+              <?php if ($level == "admin"): ?>
+                <a href="<?= base_url('admin/brg_masuk/edit/' . $masuk['id_barang_masuk']) ?>" class="btn btn-primary btn-sm">
+                  <i class="fa fa-pencil"></i> Ubah</a>
+              <?php endif; ?>
+
+              <?php if ($masuk['stok_tersisa'] == 0): ?>
+                <!-- stok habis -->
+                <button class="btn btn-danger btn-sm" disabled>
+                  <i class="fa fa-times"></i> STOK HABIS</button>
+
+              <?php else: ?>
+                <?php if ($level == "admin_poli" || $level == "kelurahan"): ?>
+                  <?php if ($stok_aktif): ?>
+                    <!-- stok pertama aktif -->
+                    <a href="<?= base_url('admin/brg_keluar/tambah/' . $masuk['id_barang'] . '/' . $id_satker . '/' . $masuk['id_barang_masuk']) ?>"
+                      class="btn btn-info btn-sm">
+                      <i class="fa fa-paper-plane"></i> Transaksi Keluar</a>
+                    <?php $stok_aktif = false; ?>
+                  <?php else: ?>
+                    <!-- stok baru dikunci -->
+                    <button class="btn btn-secondary btn-sm" disabled>
+                      <i class="fa fa-lock"></i> Tunggu stok lama habis</button>
+                  <?php endif; ?>
+                <?php else: ?>
+                  <!-- selain admin_poli & kelurahan, bebas transaksi -->
+                  <a href="<?= base_url('admin/brg_keluar/tambah/' . $masuk['id_barang'] . '/' . $id_satker . '/' . $masuk['id_barang_masuk']) ?>"
+                    class="btn btn-info btn-sm">
+                    <i class="fa fa-paper-plane"></i> Transaksi Keluar</a>
+                <?php endif; ?>
+              <?php endif; ?>
+            </td>
+          </tr>
+        <?php $i++;
+        endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- end riwayat jabatan -->
+
+>>>>>>> 317316a39cfd535efb1725f396be81380590873f
 <br>
 <!-- riwayat rotasi -->
 <div class="box-body table-responsive no-padding">
@@ -194,7 +355,11 @@ foreach ($filtered_masuk as $masuk): ?>
                 <a href="<?= base_url('admin/detil_barang/riwayat/' . $keluar['id_barang_keluar']) ?>" class="btn btn-info btn-sm">Riwayat</a><br>
                 <?php include('delete_keluar.php'); ?>
                 <a href="<?= base_url('admin/brg_masuk_kel/kirim/' . $keluar['id_barang_keluar'] . '/' . $keluar['id_satker']) ?>" class="btn btn-success btn-sm">kirim pustu</a>
+<<<<<<< HEAD
               <?php } else { 
+=======
+              <?php } else {
+>>>>>>> 317316a39cfd535efb1725f396be81380590873f
                 $statusMap = [
                   'tolak_pj' => ['fa-calendar-times-o', 'danger', 'di tolak PJ'],
                   'acc_pj'   => ['fa-calendar-check-o', 'warning', 'acc PJ'],
@@ -208,10 +373,20 @@ foreach ($filtered_masuk as $masuk): ?>
                 }
               } ?>
             </td>
+<<<<<<< HEAD
           </tr>
           <?php $i++; } ?>
+=======
+        </tr>
+      <?php $i++;
+          } ?>
+>>>>>>> 317316a39cfd535efb1725f396be81380590873f
       </tbody>
     </table>
   </div>
 </div>
+<<<<<<< HEAD
 <!-- end riwayat rotasi -->
+=======
+<!-- end riwayat rotasi -->
+>>>>>>> 317316a39cfd535efb1725f396be81380590873f

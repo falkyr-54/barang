@@ -180,6 +180,12 @@ if (!empty($brg['tanggal_bast_akhir']) && $today > $brg['tanggal_bast_akhir']) {
                     <label>NO SP</label>
                     <input type="text" name="no_sp" class="form-control" value="<?php echo $brg['no_sp'] ?>" placeholder="No SP ...">
                 </div>
+                
+                <!-- id_jenis -->
+                <div class="form-group">
+                    <label class="control-label">ID Jenis</label>
+                    <input type="text" name="id_jenis" class="form-control" value="<?php echo $brg['id_jenis'] ?>" <?= $readonly ? 'readonly' : ''; ?>>
+                </div>
 
                 <!-- No Batch & Jenis BAST -->
                 <div class="form-group">

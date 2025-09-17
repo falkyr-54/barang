@@ -78,6 +78,7 @@ class Brg_masuk extends CI_Controller
           'id_satker'       => $id_satker,
           'id_barang'       => $i->post('id_barang'),
           'jumlah'          => $i->post('jumlah'),
+          'id_jenis'        => $i->post('id_jenis'),
           'tanggal_permintaan'  => $i->post('tgl_permintaan') ? $i->post('tgl_permintaan') : date('Y-m-d'),
           'input_by'        => $this->session->userdata('username'),
           'tgl_input'       => date('Y-m-d H:i:s')
@@ -125,6 +126,7 @@ class Brg_masuk extends CI_Controller
         'id_satker'         => $id_satker,
         'id_barang'         => $i->post('id_barang'),
         'id_rekanan'        => $i->post('id_rekanan'),
+        'id_jenis'          => $i->post('id_jenis'),
         'tahun_pengadaan'   => $i->post('tahun_pengadaan'),
         'tgl_datang'        => $i->post('tgl_datang') ?: date('Y-m-d'), // fallback hari ini
         'tanggal_permintaan' => $i->post('tgl_permintaan') ?: date('Y-m-d'),
@@ -187,8 +189,8 @@ class Brg_masuk extends CI_Controller
 
 
   //FUNGSI EDIT
-public function edit($id_barang_masuk)
-{
+  public function edit($id_barang_masuk)
+  {
     $brg  = $this->Brg_masuk_model->detail($id_barang_masuk);
     $id_barang_masuk  = $brg['id_barang_masuk'];
     $satuan           = $this->Satuan_model->listing();
@@ -276,6 +278,7 @@ public function edit($id_barang_masuk)
         'no_sp'               => $i->post('no_sp'),
         'no_bacth_lot_barang' => $i->post('no_batch'),
         'jenis_bast'          => $i->post('jenis_bast'),
+        'id_jenis'          => $i->post('id_jenis'),
         'tanggal_bast_awal'   => $i->post('tgl_bast_start'),
         'tanggal_bast_akhir'  => $i->post('tgl_bast_end'),
         'no_bacth'            => $i->post('no_bast'),
@@ -289,7 +292,7 @@ public function edit($id_barang_masuk)
       $this->session->set_flashdata('sukses', 'Data berhasil diubah');
       redirect(base_url('admin/barang/riwayat/' . $brg['id_barang'] . '/' . $brg['id_satker']));
     }
-}
+  }
 
 
 

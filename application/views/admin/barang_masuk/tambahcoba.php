@@ -26,6 +26,7 @@ if (isset($error)) {
             <input type="text" name="nama_barang" class="form-control"
               value="<?php echo $barang['nama_barang'] ?>" readonly>
             <input type="hidden" name="id_barang" value="<?php echo  $barang['id_barang'] ?>">
+            <input type="hidden" name="id_jenis" value="<?php echo  $barang['id_jenis'] ?>">
 
           </div>
 
@@ -57,6 +58,7 @@ if (isset($error)) {
             <input type="text" name="nama_barang" class="form-control"
               value="<?php echo $barang['nama_barang'] ?>" readonly>
             <input type="hidden" name="id_barang" value="<?php echo  $barang['id_barang'] ?>">
+            <input type="hidden" name="id_jenis" value="<?php echo  $barang['id_jenis'] ?>">
           </div>
 
           <div class="form-group">

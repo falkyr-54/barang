@@ -126,7 +126,7 @@ if ($this->session->flashdata('error')) {
 											<button class="btn btn-info btn-sm lihat"
 												data-id="<?php echo $pengadaan['id_request'] ?>"
 												data-nama="<?php echo $pengadaan['nama_barang'] ?>">Detail</button>
-											<a href="<?php echo base_url('admin/brg_masuk/tambah/' . $pengadaan['id_request']); ?>"
+											<a href="<?php echo base_url('admin/brg_masuk/tambah/' . $pengadaan['id_barang']); ?>"
 												target="_blank"
 												class="btn btn-primary btn-sm proses <?php echo ($pengadaan['status'] == 'disetujui_pptk') ? '' : 'disabled'; ?>">
 												Proses
@@ -168,19 +168,15 @@ if ($this->session->flashdata('error')) {
 										</div>
 
 										<div class="modal-footer">
-											<?php if ($pengadaan['status'] == "disetujui_pptk") { ?>
-												<button type="button" class="btn btn-success btn-sm" disabled>
-													<span class="glyphicon glyphicon-ok"></span> Sudah Disetujui
-												</button>
-											<?php } else { ?>
-												<button type="submit" name="action" value="setujui_pptk" class="btn btn-success btn-sm">
-													<span class="glyphicon glyphicon-ok"></span> Setujui
-												</button>
-											<?php } ?>
+
+
+											<button type="submit" name="action" value="setujui_pptk" class="btn btn-success btn-sm">
+												<span class="glyphicon glyphicon-ok"></span> Setujui
+											</button>
+
 
 											<button type="submit" name="action" value="tolak_pptk"
-												class="btn btn-danger btn-sm"
-												<?php echo ($pengadaan['status'] == "disetujui_pptk") ? 'disabled' : ''; ?>>
+												class="btn btn-danger btn-sm">
 												<span class="glyphicon glyphicon-remove"></span> Tolak
 											</button>
 										</div>
